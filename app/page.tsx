@@ -76,7 +76,7 @@ export default function Home() {
         transition={{ duration: 0.5, delay: 0.2 }}
         className="mb-12"
       >
-        <h2 className="text-2xl font-semibold text-orange-700 mb-4">Sample Stories</h2>
+        <h2 className="text-2xl font-semibold text-orange-600 mb-4">Sample Stories</h2>
         <div className="relative overflow-hidden h-64">
           <motion.div
             animate={{ x: `-${storyIndex * 100}%` }}
@@ -92,7 +92,7 @@ export default function Home() {
           </motion.div>
         </div>
         <div className="text-center mt-4">
-          <Link href="/create-story" className="btn btn-primary">Create Stories</Link>
+          <Link href="/create-story" className="btn btn-primary btn-orange">Create Stories</Link>
         </div>
       </motion.section>
 
@@ -102,7 +102,7 @@ export default function Home() {
         transition={{ duration: 0.5, delay: 0.4 }}
         className="mb-12"
       >
-        <h2 className="text-2xl font-semibold text-orange-700 mb-4">Sample Activities</h2>
+        <h2 className="text-2xl font-semibold text-orange-600 mb-4">Sample Activities</h2>
         <div className="relative overflow-hidden h-64">
           <motion.div
             animate={{ x: `-${activityIndex * 100}%` }}
@@ -118,7 +118,7 @@ export default function Home() {
           </motion.div>
         </div>
         <div className="text-center mt-4">
-          <Link href="/create-activity" className="btn btn-primary">Create Activities</Link>
+          <Link href="/create-activity" className="btn btn-primary btn-orange">Create Activities</Link>
         </div>
       </motion.section>
     </main>

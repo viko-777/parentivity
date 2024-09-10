@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
-export function ActivityCreationPage() {
+export default function ActivityCreationPage() {
   const [request, setRequest] = useState('')
   const [ageGroup, setAgeGroup] = useState('')
   const [kidsProfile, setKidsProfile] = useState('')

@@ -46,7 +46,7 @@ const faqs = [
   }
 ]
 
-export function FaqPage() {
+export default function FaqPage() {
   const [openIndex, setOpenIndex] = useState(-1)
 
   return (

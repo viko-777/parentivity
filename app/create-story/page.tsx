@@ -3,20 +3,18 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
-export function ActivityCreationPage() {
+export default function StoryCreationPage() {
   const [request, setRequest] = useState('')
   const [ageGroup, setAgeGroup] = useState('')
   const [kidsProfile, setKidsProfile] = useState('')
-  const [generatedActivities, setGeneratedActivities] = useState<string[]>([])
+  const [generatedStory, setGeneratedStory] = useState('')
+  const [generatedImage, setGeneratedImage] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Here you would typically call an API to generate the activities
-    setGeneratedActivities([
-      'Activity 1: Treasure Hunt',
-      'Activity 2: Painting with Nature',
-      'Activity 3: DIY Science Experiment'
-    ])
+    // Here you would typically call an API to generate the story and image
+    setGeneratedStory('Once upon a time...')
+    setGeneratedImage('/generated-story-image.jpg')
   }
 
   return (
@@ -27,10 +25,10 @@ export function ActivityCreationPage() {
       className="min-h-screen bg-orange-100 p-8"
     >
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-3xl font-bold text-orange-500 mb-6">Create an Activity</h1>
+        <h1 className="text-3xl font-bold text-orange-500 mb-6">Create a Story</h1>
         <form onSubmit={handleSubmit} className="mb-8">
           <div className="mb-4">
-            <label htmlFor="request" className="block text-orange-700 mb-2">Activity Request</label>
+            <label htmlFor="request" className="block text-orange-700 mb-2">Story Request</label>
             <textarea
               id="request"
               value={request}
@@ -75,29 +73,20 @@ export function ActivityCreationPage() {
             className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition duration-300"
             type="submit"
           >
-            Generate Activities
+            Generate Story
           </motion.button>
         </form>
-        {generatedActivities.length > 0 && (
+        {generatedStory && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl font-bold text-orange-500 mb-4">Generated Activities</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {generatedActivities.map((activity, index) => (
-                <motion.div
-                  key={index}
-                  className="bg-orange-200 p-4 rounded-lg shadow"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <h3 className="font-bold mb-2">{activity}</h3>
-                  <p>Description of the activity goes here...</p>
-                </motion.div>
-              ))}
-            </div>
+            <h2 className="text-2xl font-bold text-orange-500 mb-4">Generated Story</h2>
+            <p className="mb-4">{generatedStory}</p>
+            {generatedImage && (
+              <img src={generatedImage} alt="Generated Story Image" className="w-full rounded-lg shadow-md" />
+            )}
           </motion.div>
         )}
       </div>
