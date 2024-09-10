@@ -90,3 +90,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+.btn-orange {
+  background-color: #f97316; /* orange-500 */
+}
+.btn-orange:hover {
+  background-color: #ea580c; /* orange-600 */
+}

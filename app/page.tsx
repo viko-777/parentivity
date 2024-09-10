@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-
+import Header from '../components/header'
 
 const sampleStories = [
   { title: "The Magic Tree", image: "/placeholder.svg?height=200&width=200" },
@@ -42,12 +42,12 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-orange-50">
+    <main className="min-h-screen bg-orange-100">
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-lg shadow-lg p-6 mb-8"
+        className="bg-orange-100 rounded-lg shadow-lg p-6 mb-8"
       >
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="flex items-center mb-4 md:mb-0">
@@ -64,13 +64,12 @@ export default function Home() {
             <Link href="/about-us" className="text-orange-600 hover:text-orange-800">About Us</Link>
             <Link href="/faq" className="text-orange-600 hover:text-orange-800">FAQ</Link>
             <Link href="/pricing" className="text-orange-600 hover:text-orange-800">Pricing</Link>
-            <Link href="/signup" className="btn btn-primary">Sign Up</Link>
-            <Link href="/login" className="btn btn-primary">Log In</Link>
-            <Link href="/account" className="btn btn-primary">My Account</Link>
+            <Link href="/signup" className="btn btn-primary btn-orange">Sign Up</Link>
+            <Link href="/login" className="btn btn-primary btn-orange">Log In</Link>
+            <Link href="/account" className="btn btn-primary btn-orange">My Account</Link>
           </nav>
         </div>
       </motion.div>
-
       <motion.section
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}

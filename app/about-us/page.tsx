@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion'
 import React from 'react';
-export function AboutUs() {
+
+export default function AboutUs() {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -10,7 +11,7 @@ export function AboutUs() {
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-orange-100 p-8"
     >
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
+      <div className="max-w-3xl mx-auto bg-orange-100 rounded-lg shadow-md p-6">
         <h1 className="text-3xl font-bold text-orange-500 mb-6">About Us</h1>
         <motion.div
           initial={{ y: 20, opacity: 0 }}
