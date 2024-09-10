@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-
+import Layout from './layout'
 
 const sampleStories = [
   { title: "The Magic Tree", image: "/placeholder.svg?height=200&width=200" },
@@ -22,7 +22,7 @@ const sampleActivities = [
   { title: "Cookie Baking", image: "/placeholder.svg?height=200&width=200" },
 ]
 
-export default function Home() {
+export function Home() {
   const [storyIndex, setStoryIndex] = useState(0)
   const [activityIndex, setActivityIndex] = useState(0)
 
@@ -42,7 +42,7 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-orange-50">
+    <Layout>
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -61,12 +61,18 @@ export default function Home() {
             <h1 className="text-3xl font-bold text-orange-600">Parentivity</h1>
           </div>
           <nav className="flex flex-wrap justify-center md:justify-end space-x-4">
-            <Link href="/about-us" className="text-orange-600 hover:text-orange-800">About Us</Link>
+            <Link href="/about" className="text-orange-600 hover:text-orange-800">About Us</Link>
             <Link href="/faq" className="text-orange-600 hover:text-orange-800">FAQ</Link>
             <Link href="/pricing" className="text-orange-600 hover:text-orange-800">Pricing</Link>
-            <Link href="/signup" className="btn btn-primary">Sign Up</Link>
-            <Link href="/login" className="btn btn-primary">Log In</Link>
-            <Link href="/account" className="btn btn-primary">My Account</Link>
+            <Link href="/signup" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition-colors">
+              Sign Up
+            </Link>
+            <Link href="/login" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition-colors">
+              Log In
+            </Link>
+            <Link href="/account" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition-colors">
+              My Account
+            </Link>
           </nav>
         </div>
       </motion.div>
@@ -93,7 +99,9 @@ export default function Home() {
           </motion.div>
         </div>
         <div className="text-center mt-4">
-          <Link href="/create-story" className="btn btn-primary">Create Stories</Link>
+          <Link href="/create-story" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition-colors">
+            Create Stories
+          </Link>
         </div>
       </motion.section>
 
@@ -119,9 +127,11 @@ export default function Home() {
           </motion.div>
         </div>
         <div className="text-center mt-4">
-          <Link href="/create-activity" className="btn btn-primary">Create Activities</Link>
+          <Link href="/create-activity" className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition-colors">
+            Create Activities
+          </Link>
         </div>
       </motion.section>
-    </main>
+    </Layout>
   )
 }
