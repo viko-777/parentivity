@@ -13,7 +13,7 @@ export default function StoryCreationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const story = await generateStories() || '' // Await the promise
+    const story = await generateStories() || ''
     setGeneratedStory(story)
     setGeneratedImage('/generated-story-image.jpg')
   }
@@ -25,7 +25,7 @@ export default function StoryCreationPage() {
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-orange-100 p-8"
     >
-      <div className="max-w-4xl mx-auto bg-orange-50 rounded-lg shadow-md p-6">
+      <div className="max-w-4xl mx-auto  rounded-lg shadow-md p-6 bg-gradient-to-b from-orange-100 to-orange-300 bg-clay ">
         <h1 className="text-3xl font-bold text-orange-500 mb-6">Create a Story</h1>
         <form onSubmit={handleSubmit} className="mb-8">
           <div className="mb-4">
@@ -85,7 +85,7 @@ export default function StoryCreationPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="shadow-lg"
+            className="shadow-lg bg-gradient-to-b from-orange-100 to-orange-300 bg-clay "
           >
             <div className="max-w-4xl mx-auto bg-orange-50 rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-orange-600 mb-4">Generated Story</h2>

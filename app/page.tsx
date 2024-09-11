@@ -42,14 +42,14 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-orange-100">
+    <main className="min-h-screen bg-gradient-to-b from-orange-100 to-orange-300 bg-clay ">
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="bg-orange-100 rounded-lg shadow-lg p-6 mb-8"
       >
-        <div className="flex flex-col md:flex-row items-center justify-between">
+        <div className="flex flex-col md:flex-row items-center justify-between ">
           <div className="flex items-center mb-4 md:mb-0">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Parentivity%20Logo-1TbPWNncxaLKwS7WrlClw0Rh63wUBS.jpg"
@@ -74,7 +74,7 @@ export default function Home() {
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="mb-12"
+        className="mb-12 bg-gradient-to-b from-orange-100 to-orange-300 bg-clay"
       >
         <h2 className="text-2xl font-semibold text-orange-600 mb-4">Sample Stories</h2>
         <div className="relative overflow-hidden h-64">
@@ -100,7 +100,7 @@ export default function Home() {
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="mb-12"
+        className="mb-12 bg-gradient-to-b from-orange-100 to-orange-300 bg-clay"
       >
         <h2 className="text-2xl font-semibold text-orange-600 mb-4">Sample Activities</h2>
         <div className="relative overflow-hidden h-64">

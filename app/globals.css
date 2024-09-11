@@ -96,3 +96,8 @@ body {
 .btn-orange:hover {
   background-color: #ea580c; /* orange-600 */
 }
+/* styles.css or your global CSS file */
+.bg-clay {
+  background-size: cover; /* Adjust as needed */
+  background-blend-mode: multiply; /* Optional: blend the gradient and texture */
+}
