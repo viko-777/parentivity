@@ -86,7 +86,7 @@ const ParentivityLanding = () => {
           <div className="flex justify-between items-center">
             <div className="w-24 h-24 relative">
               <Image 
-                src="/parentivity-logo.png" 
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Parentivity%20Logo-CEfVsppPUiSO99Y8pGAxOXONlUIJzU.png" 
                 alt="Parentivity Logo" 
                 layout="fill"
                 objectFit="contain"
@@ -126,7 +126,7 @@ const ParentivityLanding = () => {
         <p className="text-xl md:text-2xl mb-8 text-white">An AI powered parenting assistant to craft engaging activities that spark your child's imagination</p>
         <div className="w-96 h-96 mx-auto mb-8 relative">
           <Image 
-            src="/parent-and-child-activity-image.png" 
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-RjUBKXNvXxU7oKzKFZ3bl4dWOMjAu5.png" 
             alt="Parents and child doing a creative activity together" 
             layout="fill"
             objectFit="contain"
@@ -168,31 +168,31 @@ const ParentivityLanding = () => {
               {
                 title: "Instant Fun at Your Fingertips",
                 description: "No more Googling 'How to entertain my kid'! The app serves up quick, easy ideas to keep your little one engaged.",
-                image: "/instantfun.png",
+                image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-uVEHSy3Yxc64jkrHjHWhZEltosAcOc.png",
                 alt: "Father and son using the Parentivity app for instant fun ideas",
               },
               {
                 title: "Tailored to Your MiniMe",
                 description: "Whether your kiddo is into dinosaurs, princesses, or space adventures, the app delivers personalized content just for them.",
-                image: "/tailoredtourminime.png",
+                image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-fAnQ6P6ZPuMPhjrvvu48MCTwb7ohFi.png",
                 alt: "Illustrations of a child as a princess, with a dinosaur, and as an astronaut",
               },
               {
                 title: "Learning Disguised as Fun",
                 description: "Sneak in a bit of education without your kid noticing! They'll be learning and growing while they think they're just having a blast.",
-                image: "/learningasdisguised.png",
+                image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-8nYHqycXx62HA2b2Y8kaZdAGW10kVD.png",
                 alt: "Mother and children engaged in creative learning activities",
               },
               {
                 title: "ScreenFree and StressFree",
                 description: "This app lets you say, 'No screens!' without the tantrums. It's all about hands-on fun that keeps kids happy and learning.",
-                image: "/screenfreestressfree copy.png",
+                image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-8rKERnE2qkcFicoAS8AM40IrAwDyDA.png",
                 alt: "Family engaged in various creative activities in a cozy living room",
               },
               {
                 title: "Quality Time Made Easy",
                 description: "Let's face it, bonding with your kid can feel like a chore when you're busy. This app turns 'ugh, playtime' into 'yay, playtime!'",
-                image: "/qualitytimemadeeasy copy.png",
+                image: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-oed4JtIhQ3RHqOPhjawzgjUMH1dsoh.png",
                 alt: "Collage of various parent-child activities and adventures",
               },
             ].map((feature, index) => (
@@ -268,7 +268,7 @@ const ParentivityLanding = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="w-24 h-24 relative mb-4 md:mb-0">
               <Image 
-                src="/parentivity-logo.png"
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Parentivity%20Logo-CEfVsppPUiSO99Y8pGAxOXONlUIJzU.png" 
                 alt="Parentivity Logo" 
                 layout="fill"
                 objectFit="contain"
