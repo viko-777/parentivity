@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useState } from 'react'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
+import Header from '@/components/header'
 
 const ParentivityLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -79,7 +80,8 @@ const ParentivityLanding = () => {
         )
       })}
 
-      {/* Header */}
+      <Header />
+      {/* Header
       <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 relative overflow-hidden">
         <BackgroundEmojis count={30} />
         <nav className="container mx-auto px-6 py-3 relative z-10">
@@ -93,11 +95,11 @@ const ParentivityLanding = () => {
               />
             </div>
             <div className="hidden md:flex items-center space-x-4">
-              <a href="#" className="text-violet-600 hover:text-violet-700 font-bold">About Us</a>
-              <a href="#" className="text-violet-600 hover:text-violet-700 font-bold">FAQ</a>
-              <a href="#" className="text-violet-600 hover:text-violet-700 font-bold">Pricing</a>
-              <button className="bg-gradient-to-r from-purple-400 to-pink-500 text-white px-4 py-2 rounded-full hover:from-purple-500 hover:to-pink-600 transition duration-300 font-bold">Sign Up / Login</button>
-              <button className="bg-gradient-to-r from-blue-400 to-green-500 text-white px-4 py-2 rounded-full hover:from-blue-500 hover:to-green-600 transition duration-300 font-bold">My Account</button>
+              <a href="#" className="text-orange-600 hover:text-violet-700 font-bold">About Us</a>
+              <a href="#" className="text-orange-600 hover:text-violet-700 font-bold">FAQ</a>
+              <a href="#" className="text-orange-600 hover:text-violet-700 font-bold">Pricing</a>
+              <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-purple-500 hover:to-pink-600 transition duration-300 font-bold">Sign Up / Login</button>
+              <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-blue-500 hover:to-green-600 transition duration-300 font-bold">My Account</button>
             </div>
             <div className="md:hidden">
               <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -111,19 +113,19 @@ const ParentivityLanding = () => {
             <a href="#" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">About Us</a>
             <a href="#" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">FAQ</a>
             <a href="#" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">Pricing</a>
-            <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-purple-400 to-pink-500 text-white hover:from-purple-500 hover:to-pink-600">Sign Up / Login</button>
-            <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-blue-400 to-green-500 text-white hover:from-blue-500 hover:to-green-600">My Account</button>
+            <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-purple-400 to-pink-500 text-white transition duration-300 transform hover:scale-105">Sign Up / Login</button>
+            <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-blue-400 to-green-500 text-white transition duration-300 transform hover:scale-105">My Account</button>
           </div>
         )}
-      </header>
+      </header> */}
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 text-center relative bg-gradient-to-r from-orange-500 to-yellow-500">
+      <section className="pt-32 pb-20 px-4 text-center py-20 bg-opacity-80 backdrop-blur-md bg-yellow-100 ">
         <BackgroundEmojis count={30} />
-        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">
+        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-orange-600">
           Spark Creative Moments with Your Child!
         </h1>
-        <p className="text-xl md:text-2xl mb-8 text-white">An AI powered parenting assistant to craft engaging activities that spark your child's imagination</p>
+        <p className="text-xl md:text-2xl mb-8 text-orange-600">An AI powered parenting assistant to craft engaging activities that spark your child's imagination</p>
         <div className="w-96 h-96 mx-auto mb-8 relative">
           <Image 
             src="/parent-and-child-activity-image.png" 
@@ -161,7 +163,8 @@ const ParentivityLanding = () => {
 
       {/* Features Section */}
       <section className="py-20 px-4 bg-white bg-opacity-80 backdrop-blur-md">
-        <div className="container mx-auto">
+      <BackgroundEmojis count={30} />
+      <div className="container mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-orange-600">Create Joyful Adventures with Your Child</h2>
           <div className="space-y-16">
             {[
@@ -216,7 +219,8 @@ const ParentivityLanding = () => {
         </div>
       </section>
 
-      {/* Artist in the Making Section */}
+
+      {/* Artist in the Making Section
       <section className="py-20 px-4 bg-white bg-opacity-80 backdrop-blur-md relative overflow-hidden">
         <BackgroundEmojis count={30} />
         <div className="container mx-auto text-center relative z-10">
@@ -231,7 +235,7 @@ const ParentivityLanding = () => {
             Spot the Artist
           </button>
         </div>
-      </section>
+      </section> */}
 
       {/* Testimonials Section */}
       <section className="py-20 px-4 bg-yellow-100 relative overflow-hidden">
@@ -264,7 +268,8 @@ const ParentivityLanding = () => {
 
       {/* Footer */}
       <footer className="bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-8">
-        <div className="container mx-auto px-4">
+      <BackgroundEmojis count={30} />
+      <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="w-24 h-24 relative mb-4 md:mb-0">
               <Image 

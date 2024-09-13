@@ -1,36 +1,96 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
+import { useState } from 'react'
 
 export default function Header() {
-    return (
-        <motion.div
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-white rounded-lg shadow-lg p-6 mb-8"
-      >
-        <Header />
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          <div className="flex items-center mb-4 md:mb-0">
-            <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Parentivity%20Logo-1TbPWNncxaLKwS7WrlClw0Rh63wUBS.jpg"
-              alt="Parentivity Logo"
-              width={100}
-              height={100}
-              className="mr-4"
-            />
-            <h1 className="text-3xl font-bold text-orange-600">Parentivity</h1>
-          </div>
-          <nav className="flex flex-wrap justify-center md:justify-end space-x-4">
-            <Link href="/about-us" className="text-orange-600 hover:text-orange-800">About Us</Link>
-            <Link href="/faq" className="text-orange-600 hover:text-orange-800">FAQ</Link>
-            <Link href="/pricing" className="text-orange-600 hover:text-orange-800">Pricing</Link>
-            <Link href="/signup" className="btn btn-primary">Sign Up</Link>
-            <Link href="/login" className="btn btn-primary">Log In</Link>
-            <Link href="/account" className="btn btn-primary">My Account</Link>
-          </nav>
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const backgroundIcons = [
+    { Icon: Star, className: "text-yellow-400" },
+    { Icon: Moon, className: "text-blue-300" },
+    { Icon: Cloud, className: "text-gray-300" },
+    { Icon: Smile, className: "text-yellow-500" },
+    { Icon: Footprints, className: "text-pink-300" },
+    { Icon: Hand, className: "text-orange-300" },
+    { Icon: Users, className: "text-purple-400" },
+    { Icon: Flower, className: "text-pink-400" },
+    { Icon: Sun, className: "text-yellow-500" },
+    { Icon: Bike, className: "text-green-400" },
+  ]
+
+  const additionalEmojis = [
+    { emoji: "🚀" },
+    { emoji: "🌈" },
+    { emoji: "🎨" },
+    { emoji: "🎭" },
+    { emoji: "🧩" },
+    { emoji: "🏆" },
+    { emoji: "🎸" },
+    { emoji: "🧸" },
+    { emoji: "🌺" },
+    { emoji: "🦄" },
+  ]
+
+  const featureEmojis = ["🎉", "🧘‍♀️", "👶", "🎓", "❤️"]
+  const allEmojis = [...additionalEmojis.map(e => e.emoji), ...featureEmojis]
+
+  const BackgroundEmojis = ({ count = 20 }) => (
+    <>
+      {[...Array(count)].map((_, i) => (
+        <div
+          key={`bg-emoji-${i}`}
+          className="absolute text-4xl opacity-10 animate-float pointer-events-none"
+          style={{
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 5}s`,
+            animationDuration: `${Math.random() * 10 + 10}s`,
+          }}
+        >
+          {allEmojis[Math.floor(Math.random() * allEmojis.length)]}
         </div>
-      </motion.div>
+      ))}
+    </>
+  )
+
+  return (
+      <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 relative overflow-hidden">
+      <BackgroundEmojis count={30} />
+      <nav className="container mx-auto px-6 py-3 relative z-10">
+        <div className="flex justify-between items-center">
+          <div className="w-24 h-24 relative">
+            <Image 
+              src="/parentivity-logo.png" 
+              alt="Parentivity Logo" 
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
+          <div className="hidden md:flex items-center space-x-4">
+            <a href="#" className="text-orange-600 hover:text-violet-700 font-bold">About Us</a>
+            <a href="#" className="text-orange-600 hover:text-violet-700 font-bold">FAQ</a>
+            <a href="#" className="text-orange-600 hover:text-violet-700 font-bold">Pricing</a>
+            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-purple-500 hover:to-pink-600 transition duration-300 font-bold">Sign Up / Login</button>
+            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-blue-500 hover:to-green-600 transition duration-300 font-bold">My Account</button>
+          </div>
+          <div className="md:hidden">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <X /> : <Menu />}
+            </button>
+          </div>
+        </div>
+      </nav>
+      {isMenuOpen && (
+        <div className="md:hidden bg-white px-2 pt-2 pb-4 space-y-1 sm:px-3">
+          <a href="#" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">About Us</a>
+          <a href="#" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">FAQ</a>
+          <a href="#" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">Pricing</a>
+          <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-purple-400 to-pink-500 text-white transition duration-300 transform hover:scale-105">Sign Up / Login</button>
+          <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-blue-400 to-green-500 text-white transition duration-300 transform hover:scale-105">My Account</button>
+        </div>
+      )}
+    </header>
     )
 }
