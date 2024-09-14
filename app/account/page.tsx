@@ -1,13 +1,14 @@
 'use client'
-
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
+import { createClient } from '../utils/supabase/client'
+import { redirect } from 'next/navigation'
+import Link from 'next/link'
 
-  const backgroundIcons = [
+const backgroundIcons = [
     { Icon: Star, className: "text-yellow-400" },
     { Icon: Moon, className: "text-blue-300" },
     { Icon: Cloud, className: "text-gray-300" },
@@ -25,6 +26,21 @@ type TabContent = {
 };
 
 export default function UserAccountPage() {
+  const [user, setUser] = useState()
+  const supabase = createClient()
+  useEffect(() => {
+    const fetchData = async () => {
+      const {data, error} = await supabase.auth.getUser()
+      if (error || !data?.user) {
+        redirect('/login')
+      }
+      console.log(data)
+      console.log(error)
+    }
+    console.log(fetchData)
+  }, [])
+
+
   const [activeTab, setActiveTab] = useState('parent')
 
   const tabContent: TabContent = {

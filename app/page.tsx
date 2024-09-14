@@ -172,9 +172,12 @@ const ParentivityLanding = () => {
             objectFit="contain"
           />
         </div>
-        <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
+        <Link href="/login">
+        <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105" >
           Try the Magic
         </button>
+        </Link>
+        
       </section>
 
       {/* How it works Section */}
@@ -192,9 +195,11 @@ const ParentivityLanding = () => {
                 </div>
               </div>
             </div>
-            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
-              Try the Magic
-            </button>
+            <Link href="/login">
+              <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
+                Try the Magic
+              </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -337,6 +342,7 @@ const ParentivityLanding = () => {
         </div>
       </motion.section>
   </section>
+
       {/* Testimonials Section */}
       <section className="py-20 px-4 bg-yellow-100 relative overflow-hidden">
         <BackgroundEmojis count={30} />

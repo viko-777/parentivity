@@ -1,11 +1,7 @@
-import { motion } from 'framer-motion'
 import Image from 'next/image'
-import Link from 'next/link'
-import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
-import { useState } from 'react'
+import { Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 
 export default function Footer() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     const backgroundIcons = [
       { Icon: Star, className: "text-yellow-400" },

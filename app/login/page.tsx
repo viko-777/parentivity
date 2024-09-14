@@ -1,9 +1,9 @@
 'use client'
 
-import { login } from './action'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { useState } from 'react'
+import { login } from './action'
 import Header from '@/components/header'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 
@@ -21,23 +21,17 @@ import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun
   ]
 
 export default function LoginPage() {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-      })
-    
-      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value })
-      }
-    
-      const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        // Handle login logic here
-        console.log('Login submitted:', formData)
-      }
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  })
 
-      return (
-        <>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  return (
+    <>
       <Header />
       <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
       {/* Background blobs and icons */}
@@ -105,21 +99,11 @@ export default function LoginPage() {
           </motion.button>
         </form>
         <p className="mt-4 text-center text-orange-700">
-          Don't have an account? 
-          <Link href="/signup" className="text-orange-500 hover:underline">Sign up</Link>
+        Don't have an account? <Link href="/signup" className="text-orange-500 hover:underline">Sign up</Link>
         </p>
-
-        {/* <form>
-            <label htmlFor="email">Email:</label>
-            <input id="email" name="email" type="email" required />
-            <label htmlFor="password">Password:</label>
-            <input id="password" name="password" type="password" required />
-            <button formAction={login}>Log in</button>
-            <button formAction={signup}>Sign up</button>
-        </form> */}
       </div>
     </motion.div>
-  </div>
-  </>
+    </div>
+    </>
   )
 }
