@@ -2,6 +2,22 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { generateActivities } from '../utils/openai/chat'
+import Header from '@/components/header'
+import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
+
+  const backgroundIcons = [
+    { Icon: Star, className: "text-yellow-400" },
+    { Icon: Moon, className: "text-blue-300" },
+    { Icon: Cloud, className: "text-gray-300" },
+    { Icon: Smile, className: "text-yellow-500" },
+    { Icon: Footprints, className: "text-pink-300" },
+    { Icon: Hand, className: "text-orange-300" },
+    { Icon: Users, className: "text-purple-400" },
+    { Icon: Flower, className: "text-pink-400" },
+    { Icon: Sun, className: "text-yellow-500" },
+    { Icon: Bike, className: "text-green-400" },
+  ]
 
 export default function ActivityCreationPage() {
   const [request, setRequest] = useState('')
@@ -9,8 +25,9 @@ export default function ActivityCreationPage() {
   const [kidsProfile, setKidsProfile] = useState('')
   const [generatedActivities, setGeneratedActivities] = useState<string[]>([])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const story = await generateActivities() || ''
     // Here you would typically call an API to generate the activities
     setGeneratedActivities([
       'Activity 1: Treasure Hunt',
@@ -20,6 +37,30 @@ export default function ActivityCreationPage() {
   }
 
   return (
+    <>
+      <Header />
+      <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
+      {/* Background blobs and icons */}
+      <div className="absolute top-0 left-0 w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+      <div className="absolute -bottom-8 left-20 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+      {[...Array(40)].map((_, i) => {
+        const IconComponent = backgroundIcons[i % backgroundIcons.length].Icon
+        const iconClass = backgroundIcons[i % backgroundIcons.length].className
+        return (
+          <IconComponent
+            key={i}
+            className={`absolute ${iconClass} animate-float`}
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              fontSize: `${Math.random() * 1.5 + 0.5}rem`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${Math.random() * 10 + 10}s`,
+          }}
+        />
+      )
+    })}
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -78,6 +119,7 @@ export default function ActivityCreationPage() {
             Generate Activities
           </motion.button>
         </form>
+        
         {generatedActivities.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -102,5 +144,7 @@ export default function ActivityCreationPage() {
         )}
       </div>
     </motion.div>
+    </div>
+  </>
   )
 }

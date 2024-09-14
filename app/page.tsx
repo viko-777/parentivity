@@ -1,12 +1,34 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+// import { useState } from 'react'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 import Header from '@/components/header'
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+import Layout from './layout'
+
+const sampleStories = [
+  { title: "The Magic Tree", image: "/placeholder.svg?height=200&width=200" },
+  { title: "Brave Little Mouse", image: "/placeholder.svg?height=200&width=200" },
+  { title: "Space Adventure", image: "/placeholder.svg?height=200&width=200" },
+  { title: "Underwater Friends", image: "/placeholder.svg?height=200&width=200" },
+  { title: "Dinosaur Discovery", image: "/placeholder.svg?height=200&width=200" },
+]
+
+const sampleActivities = [
+  { title: "Treasure Hunt", image: "/placeholder.svg?height=200&width=200" },
+  { title: "Finger Painting", image: "/placeholder.svg?height=200&width=200" },
+  { title: "Balloon Science", image: "/placeholder.svg?height=200&width=200" },
+  { title: "Nature Walk", image: "/placeholder.svg?height=200&width=200" },
+  { title: "Cookie Baking", image: "/placeholder.svg?height=200&width=200" },
+]
 
 const ParentivityLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [storyIndex, setStoryIndex] = useState(0)
+  const [activityIndex, setActivityIndex] = useState(0)
 
   const backgroundIcons = [
     { Icon: Star, className: "text-yellow-400" },
@@ -55,6 +77,21 @@ const ParentivityLanding = () => {
       ))}
     </>
   )
+
+  useEffect(() => {
+    const storyInterval = setInterval(() => {
+      setStoryIndex((prevIndex) => (prevIndex + 1) % sampleStories.length)
+    }, 3000)
+
+    const activityInterval = setInterval(() => {
+      setActivityIndex((prevIndex) => (prevIndex + 1) % sampleActivities.length)
+    }, 3000)
+
+    return () => {
+      clearInterval(storyInterval)
+      clearInterval(activityInterval)
+    }
+  }, [])
 
   return (
     <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
@@ -134,7 +171,7 @@ const ParentivityLanding = () => {
             objectFit="contain"
           />
         </div>
-        <button className="bg-gradient-to-r from-green-400 to-blue-500 text-white text-xl px-8 py-3 rounded-full hover:from-green-500 hover:to-blue-600 transition duration-300 transform hover:scale-105">
+        <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
           Try the Magic
         </button>
       </section>
@@ -154,7 +191,7 @@ const ParentivityLanding = () => {
                 </div>
               </div>
             </div>
-            <button className="bg-gradient-to-r from-green-400 to-blue-500 text-white text-xl px-8 py-3 rounded-full hover:from-green-500 hover:to-blue-600 transition duration-300 transform hover:scale-105">
+            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
               Try the Magic
             </button>
           </div>
@@ -220,7 +257,8 @@ const ParentivityLanding = () => {
       </section>
 
 
-      {/* Artist in the Making Section
+      {
+      /* Artist in the Making Section
       <section className="py-20 px-4 bg-white bg-opacity-80 backdrop-blur-md relative overflow-hidden">
         <BackgroundEmojis count={30} />
         <div className="container mx-auto text-center relative z-10">
@@ -236,7 +274,68 @@ const ParentivityLanding = () => {
           </button>
         </div>
       </section> */}
+    
+    <section className="py-20 px-4 bg-white bg-opacity-80 backdrop-blur-md">
+    <BackgroundEmojis count={30} />
 
+      <motion.section
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="mb-12"
+      >
+        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-orange-600">Sample Stories</h2>
+        <div className="relative overflow-hidden h-64">
+          <motion.div
+            animate={{ x: `-${storyIndex * 100}%` }}
+            transition={{ duration: 0.5 }}
+            className="flex absolute"
+          >
+            {sampleStories.map((story, index) => (
+              <div key={index} className="w-full flex-shrink-0 px-4">
+                <Image src={story.image} alt={story.title} width={200} height={200} className="mx-auto rounded-lg shadow-md" />
+                <p className="mt-2 text-center text-orange-600">{story.title}</p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        <div className="text-center mt-4">
+          <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
+            Create Stories
+          </button>
+        </div>
+      </motion.section>
+
+      <motion.section
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="mb-12"
+      >
+        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-orange-600">Sample Activities</h2>
+        <div className="relative overflow-hidden h-64">
+          <motion.div
+            animate={{ x: `-${activityIndex * 100}%` }}
+            transition={{ duration: 0.5 }}
+            className="flex absolute"
+          >
+            {sampleActivities.map((activity, index) => (
+              <div key={index} className="w-full flex-shrink-0 px-4">
+                <Image src={activity.image} alt={activity.title} width={200} height={200} className="mx-auto rounded-lg shadow-md" />
+                <p className="mt-2 text-center text-orange-600">{activity.title}</p>
+              </div>
+            ))}
+          </motion.div>
+
+        </div>
+        <div className="text-center mt-4">
+          <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
+              Create Activities
+          </button>
+        </div>
+      </motion.section>
+  </section>
       {/* Testimonials Section */}
       <section className="py-20 px-4 bg-yellow-100 relative overflow-hidden">
         <BackgroundEmojis count={30} />
@@ -259,7 +358,7 @@ const ParentivityLanding = () => {
             ))}
           </div>
           <div className="text-center mt-12">
-            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xl px-8 py-3 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
+            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
               Try the Magic
             </button>
           </div>
@@ -293,5 +392,4 @@ const ParentivityLanding = () => {
     </div>
   )
 }
-
 export default ParentivityLanding
