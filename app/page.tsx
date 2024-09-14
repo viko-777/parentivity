@@ -11,19 +11,19 @@ import { motion } from 'framer-motion'
 import Layout from './layout'
 
 const sampleStories = [
-  { title: "The Magic Tree", image: "/placeholder.svg?height=200&width=200" },
-  { title: "Brave Little Mouse", image: "/placeholder.svg?height=200&width=200" },
-  { title: "Space Adventure", image: "/placeholder.svg?height=200&width=200" },
-  { title: "Underwater Friends", image: "/placeholder.svg?height=200&width=200" },
-  { title: "Dinosaur Discovery", image: "/placeholder.svg?height=200&width=200" },
+  { title: "The Magic Tree", image: "/themagictree.webp" },
+  { title: "Brave Little Mouse", image: "/Brave Little Mouse.webp" },
+  { title: "Space Adventure", image: "/Space Adventure.webp" },
+  { title: "Underwater Friends", image: "/Underwater Friends.webp" },
+  { title: "Dinosaur Discovery", image: "/Dinosaur Discovery.webp" },
 ]
 
 const sampleActivities = [
-  { title: "Treasure Hunt", image: "/placeholder.svg?height=200&width=200" },
-  { title: "Finger Painting", image: "/placeholder.svg?height=200&width=200" },
-  { title: "Balloon Science", image: "/placeholder.svg?height=200&width=200" },
-  { title: "Nature Walk", image: "/placeholder.svg?height=200&width=200" },
-  { title: "Cookie Baking", image: "/placeholder.svg?height=200&width=200" },
+  { title: "Treasure Hunt", image: "/Treasure hunt.webp" },
+  { title: "Finger Painting", image: "/Finger Painting.webp" },
+  { title: "Balloon Science", image: "/Balloon science.webp" },
+  { title: "Nature Walk", image: "/Nature Walk.webp" },
+  { title: "Cookie Baking", image: "/Cookie Baking.webp" },
 ]
 
 const ParentivityLanding = () => {

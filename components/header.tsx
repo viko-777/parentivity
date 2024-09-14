@@ -61,12 +61,14 @@ export default function Header() {
       <nav className="container mx-auto px-6 py-3 relative z-10">
         <div className="flex justify-between items-center">
           <div className="w-24 h-24 relative">
+          <Link href="/">
             <Image 
               src="/parentivityclearlogo.png" 
               alt="Parentivity Logo" 
               layout="fill"
               objectFit="contain"
             />
+            </Link>
           </div>
           <div className="hidden md:flex items-center space-x-4">
             <a href="about-us" className="text-orange-600 hover:text-violet-700 font-bold">About Us</a>
