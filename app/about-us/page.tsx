@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import Header from '@/components/header'
+import Footer from '@/components/footer'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 
   const backgroundIcons = [
@@ -50,7 +52,7 @@ export default function AboutUs() {
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-orange-100 p-8"
     >
-      <div className="max-w-3xl mx-auto bg-orange-100 rounded-lg shadow-md p-6">
+      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
         <h1 className="text-3xl font-bold text-orange-500 mb-6">About Us</h1>
         <motion.div
           initial={{ y: 20, opacity: 0 }}
@@ -72,6 +74,7 @@ export default function AboutUs() {
         </motion.div>
       </div>
     </motion.div>
+    <Footer />
   </div>
     </>
   )

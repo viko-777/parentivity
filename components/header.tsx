@@ -62,7 +62,7 @@ export default function Header() {
         <div className="flex justify-between items-center">
           <div className="w-24 h-24 relative">
             <Image 
-              src="/parentivity-logo.png" 
+              src="/parentivityclearlogo.png" 
               alt="Parentivity Logo" 
               layout="fill"
               objectFit="contain"
@@ -72,9 +72,9 @@ export default function Header() {
             <a href="about-us" className="text-orange-600 hover:text-violet-700 font-bold">About Us</a>
             <a href="faq" className="text-orange-600 hover:text-violet-700 font-bold">FAQ</a>
             <a href="pricing" className="text-orange-600 hover:text-violet-700 font-bold">Pricing</a>
-            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">Sign Up</button>
-            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">Login</button>
-            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">My Account</button>
+            <Link href="/signup"><button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">Sign Up</button></Link>
+            <Link href="/login"><button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">Login</button></Link>
+            <Link href="/account"><button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">My Account</button></Link>
           </div>
           <div className="md:hidden">
             <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -85,11 +85,12 @@ export default function Header() {
       </nav>
       {isMenuOpen && (
         <div className="md:hidden bg-white px-2 pt-2 pb-4 space-y-1 sm:px-3">
-          <a href="about-us" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">About Us</a>
-          <a href="faq" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">FAQ</a>
-          <a href="pricing" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">Pricing</a>
-          <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-purple-400 to-pink-500 text-white transition duration-300 transform hover:scale-105">Sign Up / Login</button>
-          <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-blue-400 to-green-500 text-white transition duration-300 transform hover:scale-105">My Account</button>
+          <a href="about-us" className="text-orange-600 hover:text-violet-700 font-bold">About Us</a>
+            <a href="faq" className="text-orange-600 hover:text-violet-700 font-bold">FAQ</a>
+            <a href="pricing" className="text-orange-600 hover:text-violet-700 font-bold">Pricing</a>
+            <Link href="/signup"><button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">Sign Up</button></Link>
+            <Link href="/login"><button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">Login</button></Link>
+            <Link href="/account"><button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">My Account</button></Link>
         </div>
       )}
     </header>

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { generateStories } from '../utils/openai/chat'
 import Header from '@/components/header'
+import Footer from '@/components/footer'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 
   const backgroundIcons = [
@@ -139,7 +140,7 @@ export default function StoryCreationPage() {
 
     </motion.div>
     </div>
+    <Footer />
     </>
-
   )
 }

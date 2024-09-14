@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Header from '@/components/header'
+import Footer from '@/components/footer'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 
   const backgroundIcons = [
@@ -135,6 +136,7 @@ export default function FaqPage() {
       </div>
     </motion.div>
     </div>
+    <Footer />
     </>
   )
 }

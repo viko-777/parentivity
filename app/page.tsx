@@ -4,6 +4,7 @@ import Image from 'next/image'
 // import { useState } from 'react'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 import Header from '@/components/header'
+import Footer from '@/components/footer'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -365,8 +366,9 @@ const ParentivityLanding = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-8">
+      <Footer />
+      {/* Footer */
+      /* <footer className="bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-8">
       <BackgroundEmojis count={30} />
       <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
@@ -388,7 +390,7 @@ const ParentivityLanding = () => {
             <p>&copy; 2024 Parentivity. All rights reserved.</p>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
   )
 }
