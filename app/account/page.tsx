@@ -35,12 +35,12 @@ export default function UserAccountPage() {
     const fetchUser = async () => {
       const { data: { user }, error } = await supabase.auth.getUser()
       if (error || !user) {
-        router.push('/login')
+        router.push('/')
       } else {
         setUser(user)
-        const { data, error } = await supabase.from('UserProfile').select('name').eq('user_id', user.id)
-        if (error || !data || data.length === 0) {
-          router.push('/login')
+        const { data, error } = await supabase.from('UserProfile').select('*').eq('user_id', user.id)
+        if (error) {
+          router.push('/')
         } else {
           setUserProfile(data[0])
         }
@@ -73,7 +73,7 @@ export default function UserAccountPage() {
           <div className='flex flex-col gap-4'>
             <div>
               <label className='text-orange-500'> Email: </label>
-              <input className='text-orange-500 bg-orange-100' type="email" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
+              <input className='text-orange-500 bg-orange-100' type="email" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} disabled/>
             </div>
             <div>
               <label className='text-orange-500'> Name: </label>
