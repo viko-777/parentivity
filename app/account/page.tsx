@@ -5,7 +5,7 @@ import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike, Languages, User, MapPin, Globe, Lock, CreditCard, ArrowUpCircle, Plus, Calendar, Book, Activity, Eye } from 'lucide-react'
 import { createClient } from '../utils/supabase/client'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { editProfile, createKidProfile, updateKidProfile } from './action'
 import toast, { Toaster } from 'react-hot-toast';
@@ -97,6 +97,7 @@ export default function UserAccountPage() {
       if (result.success) {
         setKidsProfiles([...kidsProfiles, result.data])
         setIsCreatingNewKid(false)
+        setEditingKid(null)
         toast.success('Kid profile created successfully!', {
           style: {
             background: '#10B981',
@@ -121,6 +122,7 @@ export default function UserAccountPage() {
         kid.id === updatedKidData.id ? result.data : kid
       ))
       setEditingKid(null)
+      setIsCreatingNewKid(false)
       toast.success('Kid profile updated successfully!', {
         style: {
           background: '#10B981',
@@ -252,18 +254,23 @@ export default function UserAccountPage() {
                         type="text"
                         value={editingKid?.name ?? ''}
                         onChange={(e) => setEditingKid({...editingKid, name: e.target.value})}
-                        className="w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
+                        className={`w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white ${editingKid?.name ? 'text-orange-500' : ''}`}
                       />
                     </div>
                     <div>
                       <label className="block text-orange-500 mb-1">Age Group</label>
-                      <input
-                        type="text"
-                        name="age_group"
+                      <select
                         value={editingKid?.ageGroup ?? ''}
                         onChange={(e) => setEditingKid({...editingKid, ageGroup: e.target.value})}
-                        className="w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
-                      />
+                        className={`w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white ${editingKid?.ageGroup ? 'text-orange-500' : ''}`}
+                      >
+                        <option value="">Select age group</option>
+                        <option value="0-2">0-2 years</option>
+                        <option value="2-4">2-4 years</option>
+                        <option value="4-6">4-6 years</option>
+                        <option value="6-8">6-8 years</option>
+                        <option value="8-10">8-10 years</option>
+                      </select>
                     </div>
                     <div>
                       <label className="block text-orange-500 mb-1">Likes</label>
@@ -271,7 +278,7 @@ export default function UserAccountPage() {
                         type="text"
                         value={editingKid?.likes ?? ''}
                         onChange={(e) => setEditingKid({...editingKid, likes: e.target.value})}
-                        className="w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
+                        className={`w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white ${editingKid?.likes ? 'text-orange-500' : ''}`}
                       />
                     </div>
                     <div>
@@ -280,7 +287,7 @@ export default function UserAccountPage() {
                         type="text"
                         value={editingKid?.dislikes ?? ''}
                         onChange={(e) => setEditingKid({...editingKid, dislikes: e.target.value})}
-                        className="w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
+                        className={`w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white ${editingKid?.dislikes ? 'text-orange-500' : ''}`}
                       />
                     </div>
                   </div>
@@ -316,7 +323,15 @@ export default function UserAccountPage() {
         transition={{ duration: 0.5 }}
         className="space-y-6"
       >
-        <h2 className="text-3xl font-bold text-orange-500 mb-6">Story Library</h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold text-orange-500">Story Library</h2>
+          <button
+            onClick={() => router.push('/create-story')}
+            className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition duration-300 flex items-center"
+          >
+            <Plus className="mr-2" size={18} /> Create Story
+          </button>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -325,7 +340,7 @@ export default function UserAccountPage() {
                 <th className="p-3 text-left text-orange-500">Title of Story</th>
                 <th className="p-3 text-left text-orange-500">Rating</th>
                 <th className="p-3 text-left text-orange-500">Created Date</th>
-                <th className="p-3 text-left text-orange-500">View Story</th>
+                <th className="p-3 text-left text-orange-500">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -338,7 +353,10 @@ export default function UserAccountPage() {
                 <td className="p-3">
                   <div className="flex items-center text-gray-600"><Calendar className="mr-2" size={18} /> 2023-05-15</div></td>
                 <td className="p-3">
-                  <div className="flex items-center text-gray-600"><Eye className="mr-2" size={18} /> View</div>
+                <div className="flex items-center text-gray-600">
+                  <Eye className="mr-2" size={24} />
+                  <X className="mr-2" size={24} />
+                </div>
                 </td>
               </tr>
               
@@ -363,7 +381,7 @@ export default function UserAccountPage() {
                 <th className="p-3 text-left text-orange-500">Activity Name</th>
                 <th className="p-3 text-left text-orange-500">Rating</th>
                 <th className="p-3 text-left text-orange-500">Created Date</th>
-                <th className="p-3 text-left text-orange-500">View Activity</th>
+                <th className="p-3 text-left text-orange-500">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -373,7 +391,10 @@ export default function UserAccountPage() {
                 <td className="p-3 "><div className="flex items-center text-gray-600"><Star className="mr-2 text-yellow-400" size={18} /> 4 stars</div></td>
                 <td className="p-3 "><div className="flex items-center text-gray-600"><Calendar className="mr-2" size={18} /> 2023-05-20</div></td>
                 <td className="p-3">
-                  <div className="flex items-center text-gray-600"><Eye className="mr-2" size={18} /> View</div>
+                <div className="flex items-center text-gray-600">
+                  <Eye className="mr-2" size={24} />
+                  <X className="mr-2" size={24} />
+                </div>
                 </td>
               </tr>
             </tbody>

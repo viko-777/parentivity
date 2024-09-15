@@ -20,20 +20,11 @@ export async function signup(formData: FormData) {
 
     if (error) {
       console.log(error)
-      redirect('/error')
-    }
-
-    if (authData && authData.user) {
-      const { error: userError } = await supabase.from('UserProfile').insert({
-          user_id: authData.user.id
-      })
-
-      if (userError) {
-        console.log(userError)
-        redirect('/error')
-      }
+      redirect('/')
+      return { success: false, message: 'An error occurred during sign up.' }
     }
 
     revalidatePath('/', 'layout')
     redirect('/')
+    return { success: true, message: 'Signup successful. Please check your email for verification.' }
   }

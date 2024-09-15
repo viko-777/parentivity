@@ -6,21 +6,24 @@ import Link from 'next/link'
 import { signup } from './action'
 import Header from '@/components/header'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
+import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
-  const backgroundIcons = [
-    { Icon: Star, className: "text-yellow-400" },
-    { Icon: Moon, className: "text-blue-300" },
-    { Icon: Cloud, className: "text-gray-300" },
-    { Icon: Smile, className: "text-yellow-500" },
-    { Icon: Footprints, className: "text-pink-300" },
-    { Icon: Hand, className: "text-orange-300" },
-    { Icon: Users, className: "text-purple-400" },
-    { Icon: Flower, className: "text-pink-400" },
-    { Icon: Sun, className: "text-yellow-500" },
-    { Icon: Bike, className: "text-green-400" },
-  ]
+const backgroundIcons = [
+  { Icon: Star, className: "text-yellow-400" },
+  { Icon: Moon, className: "text-blue-300" },
+  { Icon: Cloud, className: "text-gray-300" },
+  { Icon: Smile, className: "text-yellow-500" },
+  { Icon: Footprints, className: "text-pink-300" },
+  { Icon: Hand, className: "text-orange-300" },
+  { Icon: Users, className: "text-purple-400" },
+  { Icon: Flower, className: "text-pink-400" },
+  { Icon: Sun, className: "text-yellow-500" },
+  { Icon: Bike, className: "text-green-400" },
+]
 
 export default function SignupPage() {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -30,9 +33,33 @@ export default function SignupPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  const handleSignup = async (formData: FormData) => {
+    const result = await signup(formData)
+    if (result.success) {
+      toast.success('Sign up successful! We\'ve sent you a verification email. Please verify your email and log in again.', {
+        duration: 5000,
+        style: {
+          background: '#10B981',
+          color: '#FFFFFF',
+        },
+      });
+      setTimeout(() => {
+        router.push('/login')
+      }, 5000)
+    } else {
+      toast.error(result.message || 'An error occurred during sign up.', {
+        style: {
+          background: '#EF4444',
+          color: '#FFFFFF',
+        },
+      });
+    }
+  }
+
   return (
     <>
       <Header />
+      <Toaster position="top-right" />
       <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
       {/* Background blobs and icons */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
@@ -63,8 +90,7 @@ export default function SignupPage() {
     >
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h1 className="text-3xl font-bold text-orange-500 mb-6 text-center">Sign Up</h1>
-        <form>
-
+        <form action={handleSignup}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-orange-700 mb-2">Email</label>
             <input
@@ -94,7 +120,6 @@ export default function SignupPage() {
             whileTap={{ scale: 0.95 }}
             className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition duration-300"
             type="submit"
-            formAction={signup}
           >
             Create an Account
           </motion.button>
