@@ -120,6 +120,10 @@ export default function UserAccountPage() {
       const result = await editProfile(userProfile, user.id)
       if (result.success) {
         toast.success('Profile updated successfully!');
+        // Update the local state with the new data
+        if (result.data && result.data.length > 0) {
+          setUserProfile(result.data[0]);
+        }
       } else {
         toast.error(result.error || 'An error occurred while updating the profile.');
       }
