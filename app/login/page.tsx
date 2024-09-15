@@ -72,7 +72,7 @@ export default function LoginPage() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full text-orange-500 bg-orange-100 rounded-md p-2"
               required
             />
           </div>
@@ -84,7 +84,7 @@ export default function LoginPage() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full text-orange-500 bg-orange-100 rounded-md p-2"
               required
             />
           </div>

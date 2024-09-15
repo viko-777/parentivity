@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter, useParams } from 'next/navigation'
-import { createClient } from '../utils/supabase/client'
+import { createClient } from '../../utils/supabase/client'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { toast, ToastContainer } from 'react-toastify'

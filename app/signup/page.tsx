@@ -1,14 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { signup } from './action'
 import Header from '@/components/header'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
-import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 const backgroundIcons = [
   { Icon: Star, className: "text-yellow-400" },
   { Icon: Moon, className: "text-blue-300" },
@@ -27,31 +27,66 @@ export default function SignupPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    confirmPassword: '',
   })
+
+  const [passwordsMatch, setPasswordsMatch] = useState(true)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+    
+    // Check if passwords match when either password field changes
+    if (e.target.name === 'password' || e.target.name === 'confirmPassword') {
+      setPasswordsMatch(formData.password === e.target.value)
+    }
   }
 
   const handleSignup = async (formData: FormData) => {
-    const result = await signup(formData)
-    if (result.success) {
-      toast.success('Sign up successful! We\'ve sent you a verification email. Please verify your email and log in again.', {
-        duration: 5000,
-        style: {
-          background: '#10B981',
-          color: '#FFFFFF',
-        },
+    // Check if passwords match before submitting
+    if (formData.get('password') !== formData.get('confirmPassword')) {
+      toast.error('Passwords do not match.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
-      setTimeout(() => {
-        router.push('/login')
-      }, 5000)
-    } else {
-      toast.error(result.message || 'An error occurred during sign up.', {
-        style: {
-          background: '#EF4444',
-          color: '#FFFFFF',
-        },
+      return;
+    }
+
+    try {
+      const result = await signup(formData)
+      if (result.success) {
+        toast.success('Sign up successful! We\'ve sent you a verification email. Please verify your email and log in again.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        setTimeout(() => {
+          router.push('/')
+        }, 5000)
+      } else {
+        toast.error(result.message || 'An error occurred during sign up.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
+    } catch (error) {
+      toast.error('An unexpected error occurred. Please try again.', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
     }
   }
@@ -59,7 +94,7 @@ export default function SignupPage() {
   return (
     <>
       <Header />
-      <Toaster position="top-right" />
+      <ToastContainer position="top-right" />
       <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
       {/* Background blobs and icons */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
@@ -99,7 +134,7 @@ export default function SignupPage() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full text-orange-500 bg-orange-100 rounded-md p-2"
               required
             />
           </div>
@@ -111,15 +146,32 @@ export default function SignupPage() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full text-orange-500 bg-orange-100 rounded-md p-2"
               required
+              minLength={8}
             />
+            <p className="text-sm text-orange-600 mt-1">Password must be at least 8 characters long</p>
+          </div>
+          <div className="mb-6">
+            <label htmlFor="confirmPassword" className="block text-orange-700 mb-2">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className={`w-full text-orange-500 bg-orange-100 rounded-md p-2 ${!passwordsMatch ? 'border-red-500' : ''}`}
+              required
+              minLength={8}
+            />
+            {!passwordsMatch && <p className="text-sm text-red-500 mt-1">Passwords do not match</p>}
           </div>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition duration-300"
             type="submit"
+            disabled={!passwordsMatch}
           >
             Create an Account
           </motion.button>

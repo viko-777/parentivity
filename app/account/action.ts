@@ -7,47 +7,16 @@ import { createClient } from '../utils/supabase/server'
 export async function editProfile(userProfile: any, userId: string) {
   const supabase = createClient()
 
-  // First, check if the user profile exists
-  const { data: existingProfile, error: fetchError } = await supabase
+  const { data, error } = await supabase
     .from('UserProfile')
+    .upsert({
+      user_id: userId,
+      name: userProfile.name,
+      city: userProfile.city,
+      country: userProfile.country,
+      language: userProfile.language,
+    }, { onConflict: 'user_id' })
     .select()
-    .eq('user_id', userId)
-    .single()
-
-  if (fetchError && fetchError.code !== 'PGRST116') {
-    console.error(fetchError)
-    return { success: false, error: fetchError.message }
-  }
-
-  let result;
-
-  if (existingProfile) {
-    // Update existing profile
-    result = await supabase
-      .from('UserProfile')
-      .update({
-        name: userProfile.name,
-        city: userProfile.city,
-        country: userProfile.country,
-        language: userProfile.language,
-      })
-      .eq('user_id', userId)
-      .select()
-  } else {
-    // Insert new profile
-    result = await supabase
-      .from('UserProfile')
-      .insert({
-        user_id: userId,
-        name: userProfile.name,
-        city: userProfile.city,
-        country: userProfile.country,
-        language: userProfile.language,
-      })
-      .select()
-  }
-
-  const { data, error } = result
 
   if (error) {
     console.error(error)

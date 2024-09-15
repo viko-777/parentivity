@@ -72,6 +72,8 @@ export default function StoryCreationPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('kidsProfile:', kidsProfile)
+    console.log('storyRequest:', storyRequest)
     const story = await generateStories(kidsProfile, storyRequest) || ''
     const lines = story.split('\n')
     const title = lines[0] || 'Untitled Story'

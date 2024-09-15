@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
-import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike, Languages, User, MapPin, Globe, Lock, CreditCard, ArrowUpCircle, Plus, Calendar, Book, Activity, Eye } from 'lucide-react'
+import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike, Languages, User, MapPin, Globe, Lock, CreditCard, ArrowUpCircle, Plus, Calendar, Book, Activity, Eye, Trash2 } from 'lucide-react'
 import { createClient } from '../utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { editProfile, createKidProfile, updateKidProfile } from './action'
-import toast, { Toaster } from 'react-hot-toast';
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { useSearchParams } from 'next/navigation'
 
 const backgroundIcons = [
     { Icon: Star, className: "text-yellow-400" },
@@ -34,7 +36,19 @@ export default function UserAccountPage() {
   const [userProfile, setUserProfile] = useState<any>(null)
   const [editingKid, setEditingKid] = useState<any>(null)
   const [kidsProfiles, setKidsProfiles] = useState<any[]>([])
+  const [stories, setStories] = useState<any[]>([])
   const [isCreatingNewKid, setIsCreatingNewKid] = useState(false)
+  const [activities, setActivities] = useState<any[]>([])
+  const [storyToDelete, setStoryToDelete] = useState<any>(null)
+  const searchParams = useSearchParams()
+  const [activeTab, setActiveTab] = useState('parent')
+
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (tab && ['parent', 'kids', 'stories', 'activities'].includes(tab)) {
+      setActiveTab(tab)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -69,24 +83,45 @@ export default function UserAccountPage() {
     fetchKidsProfiles()
   }, [user])
 
+
+  useEffect(() => {
+    const fetchStories = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from('Stories')
+          .select('*')
+          .eq('user_id', user.id)
+        if (!error && data) {
+          setStories(data)
+        }
+      }
+    }
+    fetchStories()
+  }, [user])
+
+  // useEffect(() => {
+  //   const fetchActivities = async () => {
+  //     if (user) {
+  //       const { data, error } = await supabase
+  //         .from('Stories')
+  //         .select('*')
+  //         .eq('user_id', user.id)
+  //       if (!error && data) {
+  //         setActivities(data)
+  //       }
+  //     }
+  //   }
+  //   fetchActivities()
+  // }, [user])
+
   const handleEditProfile = async (e: React.FormEvent) => {
     e.preventDefault()
     if (user) {
       const result = await editProfile(userProfile, user.id)
       if (result.success) {
-        toast.success('Profile updated successfully!', {
-          style: {
-            background: '#10B981',
-            color: '#FFFFFF',
-          },
-        });
+        toast.success('Profile updated successfully!');
       } else {
-        toast.error(result.error || 'An error occurred while updating the profile.', {
-          style: {
-            background: '#EF4444',
-            color: '#FFFFFF',
-          },
-        });
+        toast.error(result.error || 'An error occurred while updating the profile.');
       }
     }
   }
@@ -98,19 +133,9 @@ export default function UserAccountPage() {
         setKidsProfiles([...kidsProfiles, result.data])
         setIsCreatingNewKid(false)
         setEditingKid(null)
-        toast.success('Kid profile created successfully!', {
-          style: {
-            background: '#10B981',
-            color: '#FFFFFF',
-          },
-        });
+        toast.success('Kid profile created successfully!');
       } else {
-        toast.error(result.error || 'An error occurred while creating the kid profile.', {
-          style: {
-            background: '#EF4444',
-            color: '#FFFFFF',
-          },
-        });
+        toast.error(result.error || 'An error occurred while creating the kid profile.');
       }
     }
   }
@@ -123,23 +148,26 @@ export default function UserAccountPage() {
       ))
       setEditingKid(null)
       setIsCreatingNewKid(false)
-      toast.success('Kid profile updated successfully!', {
-        style: {
-          background: '#10B981',
-          color: '#FFFFFF',
-        },
-      });
+      toast.success('Kid profile updated successfully!');
     } else {
-      toast.error(result.error || 'An error occurred while updating the kid profile.', {
-        style: {
-          background: '#EF4444',
-          color: '#FFFFFF',
-        },
-      });
+      toast.error(result.error || 'An error occurred while updating the kid profile.');
     }
   }
 
-  const [activeTab, setActiveTab] = useState('parent')
+  const handleDeleteStory = async (storyId: string) => {
+    const { error } = await supabase
+      .from('Stories')
+      .delete()
+      .eq('id', storyId)
+
+    if (error) {
+      toast.error('Failed to delete the story. Please try again.')
+    } else {
+      setStories(stories.filter(story => story.id !== storyId))
+      toast.success('Story deleted successfully!')
+    }
+    setStoryToDelete(null)
+  }
 
   const tabContent: TabContent = {
     parent: (
@@ -179,13 +207,13 @@ export default function UserAccountPage() {
           <button className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition duration-300" type="submit">Save Changes</button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-          <button className="bg-orange-100 text-orange-500 px-4 py-3 rounded-md hover:bg-orange-200 transition duration-300 flex items-center justify-center">
+          <button className="bg-orange-100 text-orange-500 px-4 py-3 rounded-md hover:bg-orange-200 transition duration-300 flex items-center justify-center" disabled>
             <Lock className="mr-2" size={18} /> Change Password
           </button>
-          <button className="bg-orange-100 text-orange-500 px-4 py-3 rounded-md hover:bg-orange-200 transition duration-300 flex items-center justify-center">
+          <button className="bg-orange-100 text-orange-500 px-4 py-3 rounded-md hover:bg-orange-200 transition duration-300 flex items-center justify-center" disabled>
             <CreditCard className="mr-2" size={18} /> View Current Plan
           </button>
-          <button className="bg-orange-100 text-orange-500 px-4 py-3 rounded-md hover:bg-orange-200 transition duration-300 flex items-center justify-center">
+          <button className="bg-orange-100 text-orange-500 px-4 py-3 rounded-md hover:bg-orange-200 transition duration-300 flex items-center justify-center" disabled>
             <ArrowUpCircle className="mr-2" size={18} /> Upgrade Plan
           </button>
         </div>
@@ -338,31 +366,78 @@ export default function UserAccountPage() {
               <tr className="bg-orange-100">
                 <th className="p-3 text-left text-orange-500">Sr. No.</th>
                 <th className="p-3 text-left text-orange-500">Title of Story</th>
-                <th className="p-3 text-left text-orange-500">Rating</th>
                 <th className="p-3 text-left text-orange-500">Created Date</th>
                 <th className="p-3 text-left text-orange-500">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-orange-100">
-                <td className="p-3 text-gray-600">1</td>
-                <td className="p-3">
-                  <div className="flex items-center text-gray-600"><Book className="mr-2" size={18} /> The Magic Rainbow</div></td>
-                <td className="p-3">
-                  <div className="flex items-center text-gray-600"><Star className="mr-2 text-yellow-400" size={18} /> 5 stars</div></td>
-                <td className="p-3">
-                  <div className="flex items-center text-gray-600"><Calendar className="mr-2" size={18} /> 2023-05-15</div></td>
-                <td className="p-3">
-                <div className="flex items-center text-gray-600">
-                  <Eye className="mr-2" size={24} />
-                  <X className="mr-2" size={24} />
-                </div>
-                </td>
-              </tr>
-              
+              {stories.map((story, index) => (
+                <tr key={story.id} className="border-b border-orange-100">
+                  <td className="p-3 text-gray-600">{index + 1}</td>
+                  <td className="p-3">
+                  <Link href={`/story/${story.id}`}>
+                    <div className="flex items-center text-gray-600 cursor-pointer hover:text-orange-500">
+                      <Book className="mr-2" size={18} /> {story.title}
+                    </div>
+                  </Link>
+                  </td>
+                  <td className="p-3">
+                    <div className="flex items-center text-gray-600">
+                      <Calendar className="mr-2" size={18} /> {new Date(story.created_at).toLocaleDateString()}
+                    </div>
+                  </td>
+                  <td className="p-3">
+                    <div className="flex items-center text-gray-600">
+                      <Link href={`/story/${story.id}`}>
+                        <Eye className="mr-2 cursor-pointer hover:text-orange-500" size={24} />
+                      </Link>
+                      <Trash2
+                        className="cursor-pointer hover:text-red-500"
+                        size={24}
+                        onClick={() => setStoryToDelete(story)}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
+
+        <AnimatePresence>
+          {storyToDelete && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white rounded-lg p-6 w-full max-w-md"
+              >
+                <h3 className="text-2xl font-bold text-orange-500 mb-4">Confirm Deletion</h3>
+                <p className="text-gray-600 mb-6">Are you sure you want to delete the story "{storyToDelete.title}"? This action cannot be undone.</p>
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={() => setStoryToDelete(null)}
+                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition duration-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleDeleteStory(storyToDelete.id)}
+                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     ),
     activities: (
@@ -407,61 +482,41 @@ export default function UserAccountPage() {
   return (
     <>
       <Header />
-      <Toaster position="top-right" />
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
-      {/* Background blobs and icons */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-      <div className="absolute -bottom-8 left-20 w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-      {[...Array(40)].map((_, i) => {
-        const IconComponent = backgroundIcons[i % backgroundIcons.length].Icon
-        const iconClass = backgroundIcons[i % backgroundIcons.length].className
-        return (
-          <IconComponent
-            key={i}
-            className={`absolute ${iconClass} animate-float`}
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 1.5 + 0.5}rem`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${Math.random() * 10 + 10}s`,
-            }}
-          />
-        )
-      })}
-
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen bg-orange-100 p-8"
-    >
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
-        <h1 className="text-4xl font-bold text-orange-500 mb-8">My Account</h1>
-        <div className="flex mb-8 overflow-x-auto">
-          {['parent', 'kids', 'stories', 'activities'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 ${
-                activeTab === tab ? 'bg-orange-500 text-white' : 'bg-orange-100 text-orange-500'
-              } rounded-md mr-2 transition duration-300 hover:bg-orange-400 hover:text-white`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
-        </div>
+        {/* ... background elements ... */}
         <motion.div
-          key={activeTab}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="min-h-screen bg-orange-100 p-8"
         >
-          {tabContent[activeTab as keyof TabContent]}
+          <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+            <h1 className="text-4xl font-bold text-orange-500 mb-8">My Account</h1>
+            <div className="flex mb-8 overflow-x-auto">
+              {['parent', 'kids', 'stories', 'activities'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-6 py-3 ${
+                    activeTab === tab ? 'bg-orange-500 text-white' : 'bg-orange-100 text-orange-500'
+                  } rounded-md mr-2 transition duration-300 hover:bg-orange-400 hover:text-white`}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              {tabContent[activeTab as keyof TabContent]}
+            </motion.div>
+          </div>
         </motion.div>
       </div>
-    </motion.div>
-    </div>
     <Footer />
     </>
   )

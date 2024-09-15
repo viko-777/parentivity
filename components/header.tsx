@@ -91,26 +91,23 @@ export default function Header() {
                 </>
               )}
               {!isLoading && isLoggedIn && (
-                  <>
-                    <Link href="/account">
-                      <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
-                        My Account
-                      </button>
-                    </Link>
-                    <Link href="/">
-                      <button 
-                        className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105" 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          logout();
-                        }}
-                      >
-                        Logout
-                      </button>
-                    </Link>
-                  </>
-                )}
-
+                <>
+                  <Link href="/account">
+                    <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105 shadow-md">
+                      My Account
+                    </button>
+                  </Link>
+                  <button 
+                    className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105 shadow-md" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      logout();
+                    }}
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
           </form>
 
@@ -126,31 +123,29 @@ export default function Header() {
           <div className="md:hidden bg-white px-2 pt-2 pb-4 space-y-1 sm:px-3">
             {!isLoading && !isLoggedIn && (
               <>
-                <a href="about-us" className="text-orange-600 hover:text-violet-700 font-bold">About Us</a>
-                <a href="faq" className="text-orange-600 hover:text-violet-700 font-bold">FAQ</a>
-                <a href="pricing" className="text-orange-600 hover:text-violet-700 font-bold">Pricing</a>
+                <a href="about-us" className="text-orange-600 hover:text-violet-700 font-bold block px-3 py-2">About Us</a>
+                <a href="faq" className="text-orange-600 hover:text-violet-700 font-bold block px-3 py-2">FAQ</a>
+                <a href="pricing" className="text-orange-600 hover:text-violet-700 font-bold block px-3 py-2">Pricing</a>
               </>
             )}
             {!isLoading && isLoggedIn && (
-                <>
-                  <a href="account" className="text-orange-600 hover:text-violet-700 font-bold">My Account</a>
-                  <a href="logout" className="text-orange-600 hover:text-violet-700 font-bold">Logout</a>
-                </>
-              )}
-              {!isLoading && isLoggedIn && (
-                  <>
-                    <Link href="/account">
-                      <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
-                        My Account
-                      </button>
-                    </Link>
-                    <Link href="/">
-                      <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105" formAction={logout}>
-                        Logout
-                      </button>
-                    </Link>
-                  </>
-                )}
+              <>
+                <Link href="/account">
+                  <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105 shadow-md w-full mb-2">
+                    My Account
+                  </button>
+                </Link>
+                <button 
+                  className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105 shadow-md w-full" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    logout();
+                  }}
+                >
+                  Logout
+                </button>
+              </>
+            )}
           </div>
         </form>
       )}
