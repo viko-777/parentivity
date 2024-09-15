@@ -16,13 +16,24 @@ export async function signup(formData: FormData) {
   
     console.log(data)
 
-    const { error } = await supabase.auth.signUp(data)
-  
+    const { data: authData, error } = await supabase.auth.signUp(data)
+
     if (error) {
       console.log(error)
       redirect('/error')
     }
-  
+
+    if (authData && authData.user) {
+      const { error: userError } = await supabase.from('UserProfile').insert({
+          user_id: authData.user.id
+      })
+
+      if (userError) {
+        console.log(userError)
+        redirect('/error')
+      }
+    }
+
     revalidatePath('/', 'layout')
     redirect('/')
   }
