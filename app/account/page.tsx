@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
-import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike, Languages } from 'lucide-react'
+import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike, Languages, User, MapPin, Globe, Lock, CreditCard, ArrowUpCircle } from 'lucide-react'
 import { createClient } from '../utils/supabase/client'
 import { redirect, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -66,42 +66,53 @@ export default function UserAccountPage() {
 
   const tabContent: TabContent = {
     parent: (
-      <form onSubmit={editProfile}>
-      <div>
-        <h2 className="text-3xl font-bold text-orange-500 mb-4">Parent Account</h2>
+      <motion.form
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        onSubmit={editProfile}
+        className="space-y-6"
+      >
+        <h2 className="text-3xl font-bold text-orange-500 mb-6">Parent Account</h2>
         {user && (
-          <div className='flex flex-col gap-4'>
-            <div>
-              <label className='text-orange-500'> Email: </label>
-              <input className='text-orange-500 bg-orange-100' type="email" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} disabled/>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+            <div className="space-y-2">
+              <label className='text-orange-500 flex items-center'><User className="mr-2" size={18} /> Email: </label>
+              <input className='w-full text-orange-500 bg-orange-100 rounded-md p-2' type="email" value={user.email} disabled/>
             </div>
-            <div>
-              <label className='text-orange-500'> Name: </label>
-              <input className='text-orange-500 bg-orange-100' type="text" value={userProfile?.name ?? ''} onChange={(e) => setUserProfile({ ...userProfile, name: e.target.value })} />
+            <div className="space-y-2">
+              <label className='text-orange-500 flex items-center'><User className="mr-2" size={18} /> Name: </label>
+              <input className='w-full text-orange-500 bg-orange-100 rounded-md p-2' type="text" value={userProfile?.name ?? ''} onChange={(e) => setUserProfile({ ...userProfile, name: e.target.value })} />
             </div>
-            <div>
-              <label className='text-orange-500'> City: </label>
-              <input className='text-orange-500 bg-orange-100' type="text" value={userProfile?.city ?? ''} onChange={(e) => setUserProfile({ ...userProfile, city: e.target.value })} />
+            <div className="space-y-2">
+              <label className='text-orange-500 flex items-center'><MapPin className="mr-2" size={18} /> City: </label>
+              <input className='w-full text-orange-500 bg-orange-100 rounded-md p-2' type="text" value={userProfile?.city ?? ''} onChange={(e) => setUserProfile({ ...userProfile, city: e.target.value })} />
             </div>
-            <div>
-              <label className='text-orange-500'> Country: </label>
-              <input className='text-orange-500 bg-orange-100' type="text" value={userProfile?.country ?? ''} onChange={(e) => setUserProfile({ ...userProfile, country: e.target.value })} />
+            <div className="space-y-2">
+              <label className='text-orange-500 flex items-center'><Globe className="mr-2" size={18} /> Country: </label>
+              <input className='w-full text-orange-500 bg-orange-100 rounded-md p-2' type="text" value={userProfile?.country ?? ''} onChange={(e) => setUserProfile({ ...userProfile, country: e.target.value })} />
             </div>
-            <div>
-              <label className='text-orange-500'> Language: </label>
-              <input className='text-orange-500 bg-orange-100' type="text" value={userProfile?.language ?? ''} onChange={(e) => setUserProfile({ ...userProfile, language: e.target.value })} />
+            <div className="space-y-2">
+              <label className='text-orange-500 flex items-center'><Languages className="mr-2" size={18} /> Language: </label>
+              <input className='w-full text-orange-500 bg-orange-100 rounded-md p-2' type="text" value={userProfile?.language ?? ''} onChange={(e) => setUserProfile({ ...userProfile, language: e.target.value })} />
             </div>
-            <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400" formAction={editProfile}>Save Changes</button>
           </div>
-          
         )}
-        <div className="space-y-4">
-          <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400">Change Password</button>
-          <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400">View Current Plan</button>
-          <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400">Upgrade Plan</button>
+        <div className="flex justify-end">
+          <button className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition duration-300" type="submit">Save Changes</button>
         </div>
-      </div>
-      </form>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+          <button className="bg-orange-100 text-orange-500 px-4 py-3 rounded-md hover:bg-orange-200 transition duration-300 flex items-center justify-center">
+            <Lock className="mr-2" size={18} /> Change Password
+          </button>
+          <button className="bg-orange-100 text-orange-500 px-4 py-3 rounded-md hover:bg-orange-200 transition duration-300 flex items-center justify-center">
+            <CreditCard className="mr-2" size={18} /> View Current Plan
+          </button>
+          <button className="bg-orange-100 text-orange-500 px-4 py-3 rounded-md hover:bg-orange-200 transition duration-300 flex items-center justify-center">
+            <ArrowUpCircle className="mr-2" size={18} /> Upgrade Plan
+          </button>
+        </div>
+      </motion.form>
     ),
     kids: (
       <div>
@@ -193,21 +204,21 @@ export default function UserAccountPage() {
       })}
 
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-orange-100 p-8"
     >
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-3xl font-bold text-orange-500 mb-6">My Account</h1>
-        <div className="flex mb-6">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <h1 className="text-4xl font-bold text-orange-500 mb-8">My Account</h1>
+        <div className="flex mb-8 overflow-x-auto">
           {['parent', 'kids', 'stories', 'activities'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 ${
-                activeTab === tab ? 'bg-orange-500 text-white' : 'bg-orange-200 text-orange-800'
-              } rounded-t-lg mr-2`}
+              className={`px-6 py-3 ${
+                activeTab === tab ? 'bg-orange-500 text-white' : 'bg-orange-100 text-orange-500'
+              } rounded-md mr-2 transition duration-300 hover:bg-orange-400 hover:text-white`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
