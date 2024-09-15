@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
-import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
+import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike, Languages } from 'lucide-react'
 import { createClient } from '../utils/supabase/client'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 const backgroundIcons = [
@@ -26,34 +26,82 @@ type TabContent = {
 };
 
 export default function UserAccountPage() {
-  const [user, setUser] = useState()
+  const router = useRouter()
   const supabase = createClient()
+  const [user, setUser] = useState<any>(null)
+  const [userProfile, setUserProfile] = useState<any>(null)
+
   useEffect(() => {
-    const fetchData = async () => {
-      const {data, error} = await supabase.auth.getUser()
-      if (error || !data?.user) {
-        redirect('/login')
+    const fetchUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser()
+      if (error || !user) {
+        router.push('/login')
+      } else {
+        setUser(user)
+        const { data, error } = await supabase.from('UserProfile').select('name').eq('user_id', user.id)
+        if (error || !data || data.length === 0) {
+          router.push('/login')
+        } else {
+          setUserProfile(data[0])
+        }
       }
-      console.log(data)
-      console.log(error)
     }
-    console.log(fetchData)
+    fetchUser()
   }, [])
 
+
+  const editProfile = async () => {
+    const { error } = await supabase.from('UserProfile').update({
+      name: userProfile.name,
+      city: userProfile.city,
+      country: userProfile.country,
+      language: userProfile.language,
+    }).eq('user_id', user.id)
+    if (error) {
+      console.error(error)
+    }
+  }
 
   const [activeTab, setActiveTab] = useState('parent')
 
   const tabContent: TabContent = {
     parent: (
+      <form onSubmit={editProfile}>
       <div>
         <h2 className="text-3xl font-bold text-orange-500 mb-4">Parent Account</h2>
+        {user && (
+          <div className='flex flex-col gap-4'>
+            <div>
+              <label className='text-orange-500'> Email: </label>
+              <input className='text-orange-500 bg-orange-100' type="email" value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
+            </div>
+            <div>
+              <label className='text-orange-500'> Name: </label>
+              <input className='text-orange-500 bg-orange-100' type="text" value={userProfile?.name ?? ''} onChange={(e) => setUserProfile({ ...userProfile, name: e.target.value })} />
+            </div>
+            <div>
+              <label className='text-orange-500'> City: </label>
+              <input className='text-orange-500 bg-orange-100' type="text" value={userProfile?.city ?? ''} onChange={(e) => setUserProfile({ ...userProfile, city: e.target.value })} />
+            </div>
+            <div>
+              <label className='text-orange-500'> Country: </label>
+              <input className='text-orange-500 bg-orange-100' type="text" value={userProfile?.country ?? ''} onChange={(e) => setUserProfile({ ...userProfile, country: e.target.value })} />
+            </div>
+            <div>
+              <label className='text-orange-500'> Language: </label>
+              <input className='text-orange-500 bg-orange-100' type="text" value={userProfile?.language ?? ''} onChange={(e) => setUserProfile({ ...userProfile, language: e.target.value })} />
+            </div>
+            <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400" formAction={editProfile}>Save Changes</button>
+          </div>
+          
+        )}
         <div className="space-y-4">
-          <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400">Edit Profile</button>
           <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400">Change Password</button>
           <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400">View Current Plan</button>
           <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-400">Upgrade Plan</button>
         </div>
       </div>
+      </form>
     ),
     kids: (
       <div>
@@ -143,6 +191,7 @@ export default function UserAccountPage() {
           />
         )
       })}
+
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

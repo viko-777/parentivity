@@ -30,12 +30,6 @@ export default function SignupPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle form submission logic here
-    console.log('Form submitted:', formData)
-  }
-
   return (
     <>
       <Header />
@@ -70,18 +64,7 @@ export default function SignupPage() {
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h1 className="text-3xl font-bold text-orange-500 mb-6 text-center">Sign Up</h1>
         <form>
-          {/* <div className="mb-4">
-            <label htmlFor="parentName" className="block text-orange-700 mb-2">Parent Name</label>
-            <input
-              type="text"
-              id="parentName"
-              name="parentName"
-              value={formData.parentName}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              required
-            />
-          </div> */}
+
           <div className="mb-4">
             <label htmlFor="email" className="block text-orange-700 mb-2">Email</label>
             <input
