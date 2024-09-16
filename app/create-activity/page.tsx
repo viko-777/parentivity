@@ -6,6 +6,15 @@ import { generateActivities } from '../utils/openai/chat'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
+import { useEffect } from 'react'
+import { createClient } from '../utils/supabase/client'
+import { useRouter } from 'next/navigation'
+
+interface KidsProfile {
+  id: string;
+  name: string;
+  ageGroup: string;
+}
 
   const backgroundIcons = [
     { Icon: Star, className: "text-yellow-400" },
@@ -21,20 +30,64 @@ import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun
   ]
 
 export default function ActivityCreationPage() {
-  const [request, setRequest] = useState('')
-  const [ageGroup, setAgeGroup] = useState('')
+  const [activityRequest, setActivityRequest] = useState('')
   const [kidsProfile, setKidsProfile] = useState('')
-  const [generatedActivities, setGeneratedActivities] = useState<string[]>([])
+  const [generatedActivity, setGeneratedActivity] = useState('')
+  const [generatedImage, setGeneratedImage] = useState('')
+  const [kidsProfiles, setKidsProfiles] = useState<KidsProfile[]>([])
+  const supabase = createClient()
+  const [user, setUser] = useState<any>(null)
+  const router = useRouter()
+
+  const [activityTitle, setActivityTitle] = useState('')
+  const [activityContent, setActivityContent] = useState('')
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser()
+      if (error || !user) {
+        router.push('/')
+      } else {
+        setUser(user)
+      }
+    }
+    fetchUser()
+  }, [])
+
+  useEffect(() => {
+    const fetchKidsProfiles = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from('KidsProfiles')
+          .select('*')
+          .eq('user_id', user.id)
+        if (!error && data) {
+          setKidsProfiles(data as any)
+        }
+      }
+    }
+    fetchKidsProfiles()
+  }, [user])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const story = await generateActivities() || ''
-    // Here you would typically call an API to generate the activities
-    setGeneratedActivities([
-      'Activity 1: Treasure Hunt',
-      'Activity 2: Painting with Nature',
-      'Activity 3: DIY Science Experiment'
-    ])
+    const activity = await generateActivities(kidsProfile, activityRequest) || ''
+    const lines = activity.split('\n')
+    const title = lines[0] || 'Untitled Activity'
+    const content = lines.slice(1).join('\n').trim()
+    const image = '/generated-activity-image.jpg'
+
+    if (activity == null) {
+      console.error('Error creating activity:')
+    } else {
+      console.log('Activity created successfully:')
+      // Store the generated activity data in localStorage
+      localStorage.setItem('generatedActivity', JSON.stringify({ title, content, image }))
+      const ageGroup = kidsProfiles.find(profile => profile.id === kidsProfile)?.ageGroup
+      localStorage.setItem('ageGroup', JSON.stringify({ ageGroup }))
+      // Redirect to the generated story page
+      router.push('/activity')
+    }
   }
 
   return (
@@ -75,19 +128,19 @@ export default function ActivityCreationPage() {
             <label htmlFor="request" className="block text-orange-700 mb-2">Activity Request</label>
             <textarea
               id="request"
-              value={request}
-              onChange={(e) => setRequest(e.target.value)}
-              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              value={activityRequest}
+              onChange={(e) => setActivityRequest(e.target.value)}
+              className="w-full bg-white text-orange-500 px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               rows={4}
               required
             />
           </div>
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label htmlFor="ageGroup" className="block text-orange-700 mb-2">Age Group</label>
             <select
               id="ageGroup"
-              value={ageGroup}
-              onChange={(e) => setAgeGroup(e.target.value)}
+              value={kidsProfile}
+              onChange={(e) => setKidsProfile(e.target.value)}
               className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
             >
@@ -96,19 +149,22 @@ export default function ActivityCreationPage() {
               <option value="5-6">5-6 years</option>
               <option value="7-8">7-8 years</option>
             </select>
-          </div>
+          </div> */}
           <div className="mb-4">
             <label htmlFor="kidsProfile" className="block text-orange-700 mb-2">Kid's Profile</label>
             <select
               id="kidsProfile"
               value={kidsProfile}
               onChange={(e) => setKidsProfile(e.target.value)}
-              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500"
               required
             >
               <option value="">Select Kid's Profile</option>
-              <option value="profile1">Profile 1</option>
-              <option value="profile2">Profile 2</option>
+              {kidsProfiles.map((profile: any) => (
+                <option key={profile.id} value={profile.id}>
+                  {profile.name}
+                </option>
+              ))}
             </select>
           </div>
           <motion.button
@@ -121,7 +177,7 @@ export default function ActivityCreationPage() {
           </motion.button>
         </form>
         
-        {generatedActivities.length > 0 && (
+        {/* {generatedActivities.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -142,7 +198,7 @@ export default function ActivityCreationPage() {
               ))}
             </div>
           </motion.div>
-        )}
+        )} */}
       </div>
     </motion.div>
     </div>

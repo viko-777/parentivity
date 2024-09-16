@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react' 
 import { motion, AnimatePresence } from 'framer-motion'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
@@ -40,6 +40,7 @@ export default function UserAccountPage() {
   const [isCreatingNewKid, setIsCreatingNewKid] = useState(false)
   const [activities, setActivities] = useState<any[]>([])
   const [storyToDelete, setStoryToDelete] = useState<any>(null)
+  const [activityToDelete, setActivityToDelete] = useState<any>(null)
   const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState('parent')
 
@@ -99,20 +100,20 @@ export default function UserAccountPage() {
     fetchStories()
   }, [user])
 
-  // useEffect(() => {
-  //   const fetchActivities = async () => {
-  //     if (user) {
-  //       const { data, error } = await supabase
-  //         .from('Stories')
-  //         .select('*')
-  //         .eq('user_id', user.id)
-  //       if (!error && data) {
-  //         setActivities(data)
-  //       }
-  //     }
-  //   }
-  //   fetchActivities()
-  // }, [user])
+  useEffect(() => {
+    const fetchActivities = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from('Activities')
+          .select('*')
+          .eq('user_id', user.id)
+        if (!error && data) {
+          setActivities(data)
+        }
+      }
+    }
+    fetchActivities()
+  }, [user])
 
   const handleEditProfile = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -171,6 +172,21 @@ export default function UserAccountPage() {
       toast.success('Story deleted successfully!')
     }
     setStoryToDelete(null)
+  }
+
+  const handleDeleteActivity = async (activityId: string) => {
+    const { error } = await supabase
+      .from('Activities')
+      .delete()
+      .eq('id', activityId)
+
+    if (error) {
+      toast.error('Failed to delete the activity. Please try again.')
+    } else {
+      setActivities(activities.filter(activity => activity.id !== activityId))
+      toast.success('Activity deleted successfully!')
+    }
+    setActivityToDelete(null)
   }
 
   const tabContent: TabContent = {
@@ -451,34 +467,93 @@ export default function UserAccountPage() {
         transition={{ duration: 0.5 }}
         className="space-y-6"
       >
-        <h2 className="text-3xl font-bold text-orange-500 mb-6">Activity History</h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-3xl font-bold text-orange-500 mb-6">Activity History</h2>
+          <button
+            onClick={() => router.push('/create-activity')}
+            className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition duration-300 flex items-center"
+          >
+            <Plus className="mr-2" size={18} /> Create Activity
+          </button>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="bg-orange-100">
                 <th className="p-3 text-left text-orange-500">Sr. No.</th>
                 <th className="p-3 text-left text-orange-500">Activity Name</th>
-                <th className="p-3 text-left text-orange-500">Rating</th>
                 <th className="p-3 text-left text-orange-500">Created Date</th>
                 <th className="p-3 text-left text-orange-500">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-orange-100">
-                <td className="p-3 text-gray-600">1</td>
-                <td className="p-3 "><div className="flex items-center text-gray-600"><Activity className="mr-2" size={18} /> Treasure Hunt</div></td>
-                <td className="p-3 "><div className="flex items-center text-gray-600"><Star className="mr-2 text-yellow-400" size={18} /> 4 stars</div></td>
-                <td className="p-3 "><div className="flex items-center text-gray-600"><Calendar className="mr-2" size={18} /> 2023-05-20</div></td>
-                <td className="p-3">
-                <div className="flex items-center text-gray-600">
-                  <Eye className="mr-2" size={24} />
-                  <X className="mr-2" size={24} />
-                </div>
-                </td>
-              </tr>
+              {activities.map((activity, index) => (
+                <tr key={activity.id} className="border-b border-orange-100">
+                  <td className="p-3 text-gray-600">{index + 1}</td>
+                  <td className="p-3">
+                  <Link href={`/activity/${activity.id}`}>
+                    <div className="flex items-center text-gray-600 cursor-pointer hover:text-orange-500">
+                      <Book className="mr-2" size={18} /> {activity.title}
+                    </div>
+                  </Link>
+                  </td>
+                  <td className="p-3">
+                    <div className="flex items-center text-gray-600">
+                      <Calendar className="mr-2" size={18} /> {new Date(activity.created_at).toLocaleDateString()}
+                    </div>
+                  </td>
+                  <td className="p-3">
+                    <div className="flex items-center text-gray-600">
+                      <Link href={`/activity/${activity.id}`}>
+                        <Eye className="mr-2 cursor-pointer hover:text-orange-500" size={24} />
+                      </Link>
+                      <Trash2
+                        className="cursor-pointer hover:text-red-500"
+                        size={24}
+                        onClick={() => setActivityToDelete(activity)}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
+
+        <AnimatePresence>
+          {activityToDelete && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white rounded-lg p-6 w-full max-w-md"
+              >
+                <h3 className="text-2xl font-bold text-orange-500 mb-4">Confirm Deletion</h3>
+                <p className="text-gray-600 mb-6">Are you sure you want to delete the activity "{activityToDelete.title}"? This action cannot be undone.</p>
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={() => setActivityToDelete(null)}
+                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition duration-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleDeleteActivity(activityToDelete.id)}
+                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     ),
   }
