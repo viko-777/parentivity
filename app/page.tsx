@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-// import { useState } from 'react'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
