@@ -8,7 +8,6 @@ import Footer from '@/components/footer'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import Layout from './layout'
 
 const sampleStories = [
   { title: "The Magic Tree", image: "/themagictree.webp" },
@@ -119,43 +118,6 @@ const ParentivityLanding = () => {
       })}
 
       <Header />
-      {/* Header
-      <header className="bg-white shadow-md fixed top-0 left-0 right-0 z-50 relative overflow-hidden">
-        <BackgroundEmojis count={30} />
-        <nav className="container mx-auto px-6 py-3 relative z-10">
-          <div className="flex justify-between items-center">
-            <div className="w-24 h-24 relative">
-              <Image 
-                src="/parentivity-logo.png" 
-                alt="Parentivity Logo" 
-                layout="fill"
-                objectFit="contain"
-              />
-            </div>
-            <div className="hidden md:flex items-center space-x-4">
-              <a href="#" className="text-orange-600 hover:text-violet-700 font-bold">About Us</a>
-              <a href="#" className="text-orange-600 hover:text-violet-700 font-bold">FAQ</a>
-              <a href="#" className="text-orange-600 hover:text-violet-700 font-bold">Pricing</a>
-              <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-purple-500 hover:to-pink-600 transition duration-300 font-bold">Sign Up / Login</button>
-              <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-blue-500 hover:to-green-600 transition duration-300 font-bold">My Account</button>
-            </div>
-            <div className="md:hidden">
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                {isMenuOpen ? <X /> : <Menu />}
-              </button>
-            </div>
-          </div>
-        </nav>
-        {isMenuOpen && (
-          <div className="md:hidden bg-white px-2 pt-2 pb-4 space-y-1 sm:px-3">
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">About Us</a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">FAQ</a>
-            <a href="#" className="block px-3 py-2 rounded-md text-base font-bold text-violet-600 hover:text-violet-700 hover:bg-violet-50">Pricing</a>
-            <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-purple-400 to-pink-500 text-white transition duration-300 transform hover:scale-105">Sign Up / Login</button>
-            <button className="w-full text-left block px-3 py-2 rounded-md text-base font-bold bg-gradient-to-r from-blue-400 to-green-500 text-white transition duration-300 transform hover:scale-105">My Account</button>
-          </div>
-        )}
-      </header> */}
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 text-center py-20 bg-opacity-80 backdrop-blur-md bg-yellow-100 ">
@@ -373,30 +335,6 @@ const ParentivityLanding = () => {
       </section>
 
       <Footer />
-      {/* Footer */
-      /* <footer className="bg-gradient-to-r from-orange-600 to-yellow-500 text-white py-8">
-      <BackgroundEmojis count={30} />
-      <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="w-24 h-24 relative mb-4 md:mb-0">
-              <Image 
-                src="/parentivity-logo.png"
-                alt="Parentivity Logo" 
-                layout="fill"
-                objectFit="contain"
-              />
-            </div>
-            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-              <a href="#" className="hover:text-yellow-300">Privacy Policy</a>
-              <a href="#" className="hover:text-yellow-300">Terms of Service</a>
-              <a href="#" className="hover:text-yellow-300">Contact Us</a>
-            </div>
-          </div>
-          <div className="mt-8 text-center">
-            <p>&copy; 2024 Parentivity. All rights reserved.</p>
-          </div>
-        </div>
-      </footer> */}
     </div>
   )
 }

@@ -9,6 +9,7 @@ import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun
 import { useEffect } from 'react'
 import { createClient } from '../utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface KidsProfile {
   id: string;
@@ -122,6 +123,11 @@ export default function ActivityCreationPage() {
       className="min-h-screen bg-orange-100 p-8"
     >
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+      <Link href="/account?tab=activities" className="inline-block mb-4">
+            <button className="bg-orange-500 text-white px-4 py-2 rounded-full transition duration-300 text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-orange-600">
+              ← Back to Activities
+            </button>
+      </Link>
         <h1 className="text-3xl font-bold text-orange-500 mb-6">Create an Activity</h1>
         <form onSubmit={handleSubmit} className="mb-8">
           <div className="mb-4">
@@ -135,21 +141,6 @@ export default function ActivityCreationPage() {
               required
             />
           </div>
-          {/* <div className="mb-4">
-            <label htmlFor="ageGroup" className="block text-orange-700 mb-2">Age Group</label>
-            <select
-              id="ageGroup"
-              value={kidsProfile}
-              onChange={(e) => setKidsProfile(e.target.value)}
-              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              required
-            >
-              <option value="">Select Age Group</option>
-              <option value="3-4">3-4 years</option>
-              <option value="5-6">5-6 years</option>
-              <option value="7-8">7-8 years</option>
-            </select>
-          </div> */}
           <div className="mb-4">
             <label htmlFor="kidsProfile" className="block text-orange-700 mb-2">Kid's Profile</label>
             <select
@@ -167,38 +158,17 @@ export default function ActivityCreationPage() {
               ))}
             </select>
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition duration-300"
-            type="submit"
-          >
-            Generate Activities
-          </motion.button>
+          <div className="flex justify-end">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition duration-300"
+              type="submit"
+            >
+              Generate Activity
+            </motion.button>
+          </div>
         </form>
-        
-        {/* {generatedActivities.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-2xl font-bold text-orange-500 mb-4">Generated Activities</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {generatedActivities.map((activity, index) => (
-                <motion.div
-                  key={index}
-                  className="bg-orange-200 p-4 rounded-lg shadow"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <h3 className="font-bold mb-2">{activity}</h3>
-                  <p>Description of the activity goes here...</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )} */}
       </div>
     </motion.div>
     </div>

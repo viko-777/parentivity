@@ -5,10 +5,11 @@ import { motion } from 'framer-motion'
 import { generateStories } from '../utils/openai/chat'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
-import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
+import { Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 import { useEffect } from 'react'
 import { createClient } from '../utils/supabase/client'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface KidsProfile {
   id: string;
@@ -126,6 +127,11 @@ export default function StoryCreationPage() {
     >
 
       <div className="max-w-4xl mx-auto  rounded-lg shadow-md p-6 bg-white">
+      <Link href="/account?tab=stories" className="inline-block mb-4">
+            <button className="bg-orange-500 text-white px-4 py-2 rounded-full transition duration-300 text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-orange-600">
+              ← Back to Stories
+            </button>
+        </Link>
         <h1 className="text-3xl font-bold text-orange-500 mb-6">Create a Story</h1>
         <form onSubmit={handleSubmit} className="mb-8">
           <div className="mb-4">
@@ -156,14 +162,16 @@ export default function StoryCreationPage() {
               ))}
             </select>
           </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition duration-300"
-            type="submit"
-          >
-            Generate Story
-          </motion.button>
+          <div className="flex justify-end">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition duration-300"
+              type="submit"
+            >
+              Generate Story
+            </motion.button>
+          </div>
         </form>
       </div>
       <br/>

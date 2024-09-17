@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
-import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike, Languages, User, MapPin, Globe, Lock, CreditCard, ArrowUpCircle, Plus, Calendar, Book, Activity, Eye, Trash2 } from 'lucide-react'
+import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike, Languages, User, MapPin, Globe, Lock, CreditCard, ArrowUpCircle, Plus, Calendar, Book, Activity, Eye, Trash2, Edit } from 'lucide-react'
 import { createClient } from '../utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -43,6 +43,7 @@ export default function UserAccountPage() {
   const [activityToDelete, setActivityToDelete] = useState<any>(null)
   const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState('parent')
+  const [kidToDelete, setKidToDelete] = useState<any>(null)
 
   useEffect(() => {
     const tab = searchParams.get('tab')
@@ -189,6 +190,21 @@ export default function UserAccountPage() {
     setActivityToDelete(null)
   }
 
+  const handleDeleteKidProfile = async (kidId: string) => {
+    const { error } = await supabase
+      .from('KidsProfiles')
+      .delete()
+      .eq('id', kidId)
+
+    if (error) {
+      toast.error('Failed to delete the kid profile. Please try again.')
+    } else {
+      setKidsProfiles(kidsProfiles.filter(kid => kid.id !== kidId))
+      toast.success('Kid profile deleted successfully!')
+    }
+    setKidToDelete(null)
+  }
+
   const tabContent: TabContent = {
     parent: (
       <motion.form
@@ -260,12 +276,20 @@ export default function UserAccountPage() {
               <p className="flex items-center text-gray-600 mb-2"><User className="mr-2" size={18} /> Age Group: {kid.ageGroup}</p>
               <p className="flex items-center text-gray-600 mb-2"><Star className="mr-2" size={18} /> Likes: {kid.likes}</p>
               <p className="flex items-center text-gray-600 mb-4"><X className="mr-2" size={18} /> Dislikes: {kid.dislikes}</p>
-              <button 
-                onClick={() => setEditingKid(kid)}
-                className="bg-orange-100 text-orange-500 px-4 py-2 rounded-md hover:bg-orange-200 transition duration-300"
-              >
-                Edit Profile
-              </button>
+              <div className="flex space-x-2">
+                <button 
+                  onClick={() => setEditingKid(kid)}
+                  className="bg-orange-100 text-orange-500 px-4 py-2 rounded-md hover:bg-orange-200 transition duration-300 flex items-center"
+                >
+                  <Edit className="mr-2" size={18} /> Edit
+                </button>
+                <button 
+                  onClick={() => setKidToDelete(kid)}
+                  className="bg-red-100 text-red-500 px-4 py-2 rounded-md hover:bg-red-200 transition duration-300 flex items-center"
+                >
+                  <Trash2 className="mr-2" size={18} /> Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -310,9 +334,9 @@ export default function UserAccountPage() {
                       <select
                         value={editingKid?.ageGroup ?? ''}
                         onChange={(e) => setEditingKid({...editingKid, ageGroup: e.target.value})}
-                        className={`w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white ${editingKid?.ageGroup ? 'text-orange-500' : ''}`}
+                        className={`w-full p-2 border border-orange-200 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white ${editingKid?.ageGroup ? 'text-orange-500' : 'text-orange-500'}`}
                       >
-                        <option value="">Select age group</option>
+                        <option value="select">Select age group</option>
                         <option value="0-2">0-2 years</option>
                         <option value="2-4">2-4 years</option>
                         <option value="4-6">4-6 years</option>
@@ -358,6 +382,41 @@ export default function UserAccountPage() {
                     </button>
                   </div>
                 </form>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
+          {kidToDelete && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white rounded-lg p-6 w-full max-w-md"
+              >
+                <h3 className="text-2xl font-bold text-orange-500 mb-4">Confirm Deletion</h3>
+                <p className="text-gray-600 mb-6">Are you sure you want to delete the profile for "{kidToDelete.name}"? This action cannot be undone.</p>
+                <div className="flex justify-end space-x-2">
+                  <button
+                    onClick={() => setKidToDelete(null)}
+                    className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition duration-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleDeleteKidProfile(kidToDelete.id)}
+                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
+                  >
+                    Delete
+                  </button>
+                </div>
               </motion.div>
             </motion.div>
           )}

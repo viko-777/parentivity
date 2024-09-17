@@ -2,14 +2,20 @@
 
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+const openai_for_stories = new OpenAI({
+  apiKey: process.env.OPENAI_STORY_API_KEY,
+});
+
+
+
+const openai_for_activities = new OpenAI({
+  apiKey: process.env.OPENAI_ACTIVITY_API_KEY,
 });
 
 
 export async function generateStories(kidsProfile: any, storyRequest: any) {
 
-    const response = await openai.chat.completions.create({
+    const response = await openai_for_stories.chat.completions.create({
         model: "gpt-4o-mini",
           messages: [
             {
@@ -36,9 +42,9 @@ export async function generateStories(kidsProfile: any, storyRequest: any) {
     return response.choices[0].message.content;
 }
 
-export async function generateActivities(kidsProfile: any, storyRequest: any) {
+export async function generateActivities(kidsProfile: any, activityRequest: any) {
 
-  const response = await openai.chat.completions.create({
+  const response = await openai_for_activities.chat.completions.create({
       model: "gpt-4o-mini",
         messages: [
           {
@@ -46,7 +52,7 @@ export async function generateActivities(kidsProfile: any, storyRequest: any) {
             "content": [
               {
                 "type": "text",
-                "text": "kidsProfile: " + kidsProfile + " storyRequest: " + storyRequest
+                "text": "kidsProfile: " + kidsProfile + " activityRequest: " + activityRequest
               }
             ]
           }
