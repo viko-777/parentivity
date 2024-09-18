@@ -20,19 +20,6 @@ export default function Header() {
     router.push('/')
   }, [router]);
 
-  const backgroundIcons = [
-    { Icon: Star, className: "text-yellow-400" },
-    { Icon: Moon, className: "text-blue-300" },
-    { Icon: Cloud, className: "text-gray-300" },
-    { Icon: Smile, className: "text-yellow-500" },
-    { Icon: Footprints, className: "text-pink-300" },
-    { Icon: Hand, className: "text-orange-300" },
-    { Icon: Users, className: "text-purple-400" },
-    { Icon: Flower, className: "text-pink-400" },
-    { Icon: Sun, className: "text-yellow-500" },
-    { Icon: Bike, className: "text-green-400" },
-  ]
-
   const additionalEmojis = [
     { emoji: "🚀" },
     { emoji: "🌈" },
@@ -73,13 +60,14 @@ export default function Header() {
       <BackgroundEmojis count={30} />
       <nav className="container mx-auto px-6 py-3 relative z-10">
         <div className="flex justify-between items-center">
-          <div className="w-24 h-24 relative">
+          <div className="w-32 h-32 relative">
             <Link href="/">
               <Image 
                 src="/parentivityclearlogo.png" 
                 alt="Parentivity Logo" 
                 layout="fill"
-                className="w-24 h-24"
+                objectFit="contain"
+                className="w-full h-full"
               />
             </Link>
           </div>

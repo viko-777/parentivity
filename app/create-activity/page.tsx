@@ -15,6 +15,12 @@ interface KidsProfile {
   id: string;
   name: string;
   ageGroup: string;
+  likes: string;
+  dislikes: string;
+}
+interface Language {
+  name: string;
+  code: string;
 }
 
   const backgroundIcons = [
@@ -42,6 +48,9 @@ export default function ActivityCreationPage() {
 
   const [activityTitle, setActivityTitle] = useState('')
   const [activityContent, setActivityContent] = useState('')
+  const [languages, setLanguages] = useState<Language[]>([])
+  const [selectedLanguage, setSelectedLanguage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -70,9 +79,45 @@ export default function ActivityCreationPage() {
     fetchKidsProfiles()
   }, [user])
 
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from('UserProfile')
+          .select('language')
+          .eq('user_id', user.id)
+          .single()
+        if (!error && data && data.language) {
+          const languageList = data.language.split(',').map((lang: string) => ({
+            name: lang.trim(),
+            code: lang.trim().toLowerCase()
+          }));
+          setLanguages(languageList);
+        }
+      }
+    }
+    fetchLanguages()
+  }, [user])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const activity = await generateActivities(kidsProfile, activityRequest) || ''
+    setIsLoading(true)
+    const selectedProfile = kidsProfiles.find(profile => profile.id === kidsProfile)
+    const { name, ageGroup, likes, dislikes } = selectedProfile || {}
+    console.log('kids name:', selectedProfile?.name)
+    console.log('kids ageGroup:', selectedProfile?.ageGroup)
+    console.log('kids likes:', selectedProfile?.likes)
+    console.log('kids dislikes:', selectedProfile?.dislikes)
+    console.log('selectedLanguage:', selectedLanguage)
+    try {
+    const activity = await generateActivities(
+      name ?? '',
+      ageGroup ?? '',
+      likes ?? '',
+      dislikes ?? '',
+      activityRequest,
+      selectedLanguage
+    ) || ''
     const lines = activity.split('\n')
     const title = lines[0] || 'Untitled Activity'
     const content = lines.slice(1).join('\n').trim()
@@ -89,6 +134,12 @@ export default function ActivityCreationPage() {
       // Redirect to the generated story page
       router.push('/activity')
     }
+  }catch (error) {
+    console.error('Error creating activity:', error)
+    // Handle error (e.g., show error message to user)
+  }finally {
+    setIsLoading(false)
+  }
   }
 
   return (
@@ -158,16 +209,40 @@ export default function ActivityCreationPage() {
               ))}
             </select>
           </div>
+          <div className="mb-4">
+            <label htmlFor="language" className="block text-orange-700 mb-2">Story Language</label>
+            <select
+              id="language"
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500"
+              required
+            >
+              <option value="">Select Language</option>
+              {languages.map((language, index) => (
+                <option key={index} value={language.code}>
+                  {language.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className="flex justify-end">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition duration-300"
               type="submit"
+              disabled={isLoading}
             >
-              Generate Activity
+              {isLoading ? 'Generating...' : 'Generate Activity'}
             </motion.button>
           </div>
+          {isLoading && (
+            <div className="mt-4 text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-500"></div>
+              <p className="mt-2 text-orange-500">Creating your activity...</p>
+            </div>
+          )}
         </form>
       </div>
     </motion.div>

@@ -119,26 +119,35 @@ const ParentivityLanding = () => {
       <Header />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 text-center py-20 bg-opacity-80 backdrop-blur-md bg-yellow-100 ">
-        <BackgroundEmojis count={30} />
-        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-orange-600">
-          Spark Creative Moments with Your Child!
-        </h1>
-        <p className="text-xl md:text-2xl mb-8 text-orange-600">An AI powered parenting assistant to craft engaging activities that spark your child's imagination</p>
-        <div className="w-96 h-96 mx-auto mb-8 relative">
-          <Image 
-            src="/parent-and-child-activity-image.png" 
-            alt="Parents and child doing a creative activity together" 
+      <section className="pt-32 pb-20 px-4 text-center py-20 bg-opacity-80 backdrop-blur-md relative">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/parentivity.svg"
+            alt="Logo background"
             layout="fill"
-            objectFit="contain"
+            objectFit="cover"
+            className="opacity-2I0"
           />
         </div>
-        <Link href="/login">
-        <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105" >
-          Try the Magic
-        </button>
-        </Link>
-        
+        <div className="relative z-10">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-orange-600">
+            Spark Creative Moments with Your Child!
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 text-orange-600">An AI powered parenting assistant to craft engaging activities that spark your child's imagination</p>
+          <div className="w-96 h-96 mx-auto mb-8 relative">
+            <Image 
+              src="/parent-and-child-activity-image.png" 
+              alt="Parents and child doing a creative activity together" 
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
+          <Link href="/login">
+            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
+              Try the Magic
+            </button>
+          </Link>
+        </div>
       </section>
 
       {/* How it works Section */}

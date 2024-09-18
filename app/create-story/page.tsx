@@ -15,6 +15,13 @@ interface KidsProfile {
   id: string;
   name: string;
   ageGroup: string;
+  likes: string;
+  dislikes: string;
+}
+
+interface Language {
+  name: string;
+  code: string;
 }
 
 const backgroundIcons = [
@@ -43,6 +50,11 @@ export default function StoryCreationPage() {
   const [storyTitle, setStoryTitle] = useState('')
   const [storyContent, setStoryContent] = useState('')
 
+  const [languages, setLanguages] = useState<Language[]>([])
+  const [selectedLanguage, setSelectedLanguage] = useState('')
+
+  const [isLoading, setIsLoading] = useState(false)
+
   useEffect(() => {
     const fetchUser = async () => {
       const { data: { user }, error } = await supabase.auth.getUser()
@@ -70,27 +82,65 @@ export default function StoryCreationPage() {
     fetchKidsProfiles()
   }, [user])
 
+  useEffect(() => {
+    const fetchLanguages = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from('UserProfile')
+          .select('language')
+          .eq('user_id', user.id)
+          .single()
+        if (!error && data && data.language) {
+          const languageList = data.language.split(',').map((lang: string) => ({
+            name: lang.trim(),
+            code: lang.trim().toLowerCase()
+          }));
+          setLanguages(languageList);
+        }
+      }
+    }
+    fetchLanguages()
+  }, [user])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('kidsProfile:', kidsProfile)
+    setIsLoading(true)
+    const selectedProfile = kidsProfiles.find(profile => profile.id === kidsProfile)
+    const { name, ageGroup, likes, dislikes } = selectedProfile || {}
+    console.log('kids name:', selectedProfile?.name)
+    console.log('kids ageGroup:', selectedProfile?.ageGroup)
+    console.log('kids likes:', selectedProfile?.likes)
+    console.log('kids dislikes:', selectedProfile?.dislikes)
     console.log('storyRequest:', storyRequest)
-    const story = await generateStories(kidsProfile, storyRequest) || ''
-    const lines = story.split('\n')
-    const title = lines[0] || 'Untitled Story'
-    const content = lines.slice(1).join('\n').trim()
-    const image = '/generated-story-image.jpg'
+    console.log('selectedLanguage:', selectedLanguage)
+    try {
+      const story = await generateStories(
+        name ?? '',
+        ageGroup ?? '',
+        likes ?? '',
+        dislikes ?? '',
+        storyRequest,
+        selectedLanguage
+      ) || ''
+      const lines = story.split('\n')
+      const title = lines[0] || 'Untitled Story'
+      const content = lines.slice(1).join('\n').trim()
+      const image = '/generated-story-image.jpg'
 
-    if (story == null) {
-      console.error('Error creating story:')
-    } else {
-      console.log('Story created successfully:')
-      // Store the generated story data in localStorage
-      localStorage.setItem('generatedStory', JSON.stringify({ title, content, image }))
-      const ageGroup = kidsProfiles.find(profile => profile.id === kidsProfile)?.ageGroup
-      localStorage.setItem('ageGroup', JSON.stringify({ ageGroup }))
-      // Redirect to the generated story page
-      router.push('/story')
+      if (story == null) {
+        console.error('Error creating story:')
+      } else {
+        console.log('Story created successfully:')
+        localStorage.setItem('generatedStory', JSON.stringify({ title, content, image }))
+        const ageGroup = kidsProfiles.find(profile => profile.id === kidsProfile)?.ageGroup
+        localStorage.setItem('ageGroup', JSON.stringify({ ageGroup }))
+        router.push('/story')
+      }
+    } catch (error) {
+      console.error('Error creating story:', error)
+      // Handle error (e.g., show error message to user)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -146,18 +196,34 @@ export default function StoryCreationPage() {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="kidsProfile" className="block text-orange-700 mb-2">Kid's Profile</label>
+            <label htmlFor="kidsProfile" className="block text-orange-700 mb-2">Kid's Profile (Select if you want the kid to be part of the story)</label>
             <select
               id="kidsProfile"
               value={kidsProfile}
               onChange={(e) => setKidsProfile(e.target.value)}
               className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500"
-              required
             >
               <option value="">Select Kid's Profile</option>
               {kidsProfiles.map((profile: any) => (
                 <option key={profile.id} value={profile.id}>
                   {profile.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label htmlFor="language" className="block text-orange-700 mb-2">Story Language</label>
+            <select
+              id="language"
+              value={selectedLanguage}
+              onChange={(e) => setSelectedLanguage(e.target.value)}
+              className="w-full px-3 py-2 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500"
+              required
+            >
+              <option value="">Select Language</option>
+              {languages.map((language, index) => (
+                <option key={index} value={language.code}>
+                  {language.name}
                 </option>
               ))}
             </select>
@@ -168,10 +234,17 @@ export default function StoryCreationPage() {
               whileTap={{ scale: 0.95 }}
               className="bg-orange-500 text-white px-6 py-2 rounded hover:bg-orange-600 transition duration-300"
               type="submit"
+              disabled={isLoading}
             >
-              Generate Story
+              {isLoading ? 'Generating...' : 'Generate Story'}
             </motion.button>
           </div>
+          {isLoading && (
+            <div className="mt-4 text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-500"></div>
+              <p className="mt-2 text-orange-500">Creating your story...</p>
+            </div>
+          )}
         </form>
       </div>
       <br/>

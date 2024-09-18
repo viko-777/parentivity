@@ -11,6 +11,10 @@ import { editProfile, createKidProfile, updateKidProfile } from './action'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { useSearchParams } from 'next/navigation'
+import { CitySelect, CountrySelect, StateSelect } from "react-country-state-city";
+import "react-country-state-city/dist/react-country-state-city.css";
+import Select from 'react-select';
+
 
 const backgroundIcons = [
     { Icon: Star, className: "text-yellow-400" },
@@ -29,6 +33,18 @@ type TabContent = {
   [key: string]: JSX.Element;
 };
 
+type LanguageOption = { value: string; label: string };
+
+const languageOptions: LanguageOption[] = [
+  { value: 'English', label: 'English' },
+  { value: 'Hindi', label: 'Hindi' },
+  { value: 'Marathi', label: 'Marathi' },
+  { value: 'Gujarati', label: 'Gujarati' },
+  { value: 'Kannada', label: 'Kannada' },
+  { value: 'Telugu', label: 'Telugu' },
+  { value: 'Tamil', label: 'Tamil' },
+];
+
 export default function UserAccountPage() {
   const router = useRouter()
   const supabase = createClient()
@@ -44,6 +60,8 @@ export default function UserAccountPage() {
   const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState('parent')
   const [kidToDelete, setKidToDelete] = useState<any>(null)
+  const [countryId, setCountryId] = useState<number | null>(null);
+  const [stateId, setStateId] = useState<number | null>(null);
 
   useEffect(() => {
     const tab = searchParams.get('tab')
@@ -205,6 +223,11 @@ export default function UserAccountPage() {
     setKidToDelete(null)
   }
 
+  const handleLanguageChange = (selectedOptions: readonly LanguageOption[]) => {
+    const selectedLanguages = selectedOptions.map(option => option.value);
+    setUserProfile({ ...userProfile, language: selectedLanguages.join(', ') });
+  };
+
   const tabContent: TabContent = {
     parent: (
       <motion.form
@@ -226,16 +249,56 @@ export default function UserAccountPage() {
               <input className='w-full text-orange-500 bg-orange-100 rounded-md p-2' type="text" value={userProfile?.name ?? ''} onChange={(e) => setUserProfile({ ...userProfile, name: e.target.value })} />
             </div>
             <div className="space-y-2">
+              <label className='text-orange-500 flex items-center'><Globe className="mr-2 text-orange-500" size={18} /> Country: </label>
+              <CountrySelect
+                onChange={(e: any) => {
+                  setCountryId(e.id);
+                  setUserProfile({ ...userProfile, country: e.name });
+                }}
+                placeHolder="Select Country"
+                containerClassName="w-full bg-orange-100 text-orange-500"
+                inputClassName="w-full text-orange-500 bg-orange-100 rounded-md p-2"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className='text-orange-500 flex items-center'><MapPin className="mr-2" size={18} /> State: </label>
+              <StateSelect
+                countryid={countryId}
+                onChange={(e: any) => {
+                  setStateId(e.id);
+                  setUserProfile({ ...userProfile, state: e.name });
+                }}
+                placeHolder="Select State"
+                containerClassName="w-full bg-orange-100 text-orange-500"
+                inputClassName="w-full text-orange-500 bg-orange-100 rounded-md p-2"
+              />
+            </div>
+            <div className="space-y-2">
               <label className='text-orange-500 flex items-center'><MapPin className="mr-2" size={18} /> City: </label>
-              <input className='w-full text-orange-500 bg-orange-100 rounded-md p-2' type="text" value={userProfile?.city ?? ''} onChange={(e) => setUserProfile({ ...userProfile, city: e.target.value })} />
+              <CitySelect
+                countryid={countryId}
+                stateid={stateId}
+                onChange={(e: any) => {
+                  setUserProfile({ ...userProfile, city: e.name });
+                }}
+                placeHolder="Select City"
+                containerClassName="w-full bg-orange-100 text-orange-500"
+                inputClassName="w-full text-orange-500 bg-orange-100 rounded-md p-2"
+              />
             </div>
             <div className="space-y-2">
-              <label className='text-orange-500 flex items-center'><Globe className="mr-2" size={18} /> Country: </label>
-              <input className='w-full text-orange-500 bg-orange-100 rounded-md p-2' type="text" value={userProfile?.country ?? ''} onChange={(e) => setUserProfile({ ...userProfile, country: e.target.value })} />
-            </div>
-            <div className="space-y-2">
-              <label className='text-orange-500 flex items-center'><Languages className="mr-2" size={18} /> Language: </label>
-              <input className='w-full text-orange-500 bg-orange-100 rounded-md p-2' type="text" value={userProfile?.language ?? ''} onChange={(e) => setUserProfile({ ...userProfile, language: e.target.value })} />
+              <label className='text-orange-500 flex items-center'>
+                <Languages className="mr-2" size={18} /> Language:
+              </label>
+              <Select
+                isMulti
+                options={languageOptions}
+                value={userProfile?.language ? userProfile.language.split(', ').map((lang: string) => ({ value: lang, label: lang })) : []}
+                onChange={handleLanguageChange}
+                className="text-orange-500"
+                classNamePrefix="select"
+                placeholder="Select languages"
+              />
             </div>
           </div>
         )}
