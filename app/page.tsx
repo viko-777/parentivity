@@ -126,7 +126,7 @@ const ParentivityLanding = () => {
             alt="Logo background"
             layout="fill"
             objectFit="cover"
-            className="opacity-2I0"
+            className="opacity-20"
           />
         </div>
         <div className="relative z-10">
