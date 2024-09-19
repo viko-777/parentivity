@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
+import { createClient } from './utils/supabase/client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -28,7 +29,9 @@ const ParentivityLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [storyIndex, setStoryIndex] = useState(0)
   const [activityIndex, setActivityIndex] = useState(0)
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const supabase = createClient()
+  
   const backgroundIcons = [
     { Icon: Star, className: "text-yellow-400" },
     { Icon: Moon, className: "text-blue-300" },
@@ -90,6 +93,18 @@ const ParentivityLanding = () => {
       clearInterval(storyInterval)
       clearInterval(activityInterval)
     }
+  }, [])
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser()
+      if (error || !user) {
+        setIsLoggedIn (false)
+      } else {
+        setIsLoggedIn(true)
+      }
+    }
+    fetchUser()
   }, [])
 
   return (
@@ -277,9 +292,11 @@ const ParentivityLanding = () => {
         </div>
 
         <div className="text-center mt-4">
+        <Link href={isLoggedIn ? "/create-story" : "/login"}> 
           <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
             Create Stories
           </button>
+        </Link>
         </div>
       </motion.section>
 
@@ -306,9 +323,11 @@ const ParentivityLanding = () => {
 
         </div>
         <div className="text-center mt-4">
+        <Link href={isLoggedIn ? "/create-activity" : "/login"}>
           <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
               Create Activities
           </button>
+        </Link>
         </div>
       </motion.section>
   </section>
@@ -335,9 +354,11 @@ const ParentivityLanding = () => {
             ))}
           </div>
           <div className="text-center mt-12">
-            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
-              Try the Magic
-            </button>
+          <Link href="/login">
+              <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
+                Try the Magic
+              </button>
+          </Link>
           </div>
         </div>
       </section>
