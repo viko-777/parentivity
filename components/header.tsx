@@ -60,11 +60,11 @@ export default function Header() {
       <BackgroundEmojis count={30} />
       <nav className="container mx-auto px-6 py-3 relative z-10">
         <div className="flex justify-between items-center">
-          <div className="w-32 h-32 relative">
+          <div className="w-20 h-20 relative">
             <Link href="/">
               <Image 
-                src="/parentivityclearlogo.png" 
-                alt="Parentivity Logo" 
+                src="/Parentivity.svg" 
+                alt="Parentivity" 
                 layout="fill"
                 objectFit="contain"
                 className="w-full h-full"
@@ -75,9 +75,9 @@ export default function Header() {
             <div className="hidden md:flex items-center space-x-4">
               {!isLoading && !isLoggedIn && (
                 <>
-                  <a href="about-us" className="text-orange-600 hover:text-violet-700 font-bold">About Us</a>
-                  <a href="faq" className="text-orange-600 hover:text-violet-700 font-bold">FAQ</a>
-                  <a href="pricing" className="text-orange-600 hover:text-violet-700 font-bold">Pricing</a>
+                  <a href="about-us" className="text-orange-600 hover:to-orange-600 transition duration-300 transform hover:scale-105 text-lg">About Us</a>
+                  <a href="faq" className="text-orange-600 hover:to-orange-600 transition duration-300 transform hover:scale-105 text-lg">FAQ</a>
+                  <a href="pricing" className="text-orange-600 hover:to-orange-600 transition duration-300 transform hover:scale-105 text-lg">Pricing</a>
                 </>
               )}
               {!isLoading && isLoggedIn && (

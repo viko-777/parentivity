@@ -62,6 +62,9 @@ export default function UserAccountPage() {
   const [kidToDelete, setKidToDelete] = useState<any>(null)
   const [countryId, setCountryId] = useState<number | null>(null);
   const [stateId, setStateId] = useState<number | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<any>(null);
+  const [selectedState, setSelectedState] = useState<any>(null);
+  const [selectedCity, setSelectedCity] = useState<any>(null);
 
   useEffect(() => {
     const tab = searchParams.get('tab')
@@ -133,6 +136,14 @@ export default function UserAccountPage() {
     }
     fetchActivities()
   }, [user])
+
+  useEffect(() => {
+    if (userProfile) {
+      setSelectedCountry({ name: userProfile.country });
+      setSelectedState({ name: userProfile.state });
+      setSelectedCity({ name: userProfile.city });
+    }
+  }, [userProfile]);
 
   const handleEditProfile = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -253,11 +264,13 @@ export default function UserAccountPage() {
               <CountrySelect
                 onChange={(e: any) => {
                   setCountryId(e.id);
+                  setSelectedCountry(e);
                   setUserProfile({ ...userProfile, country: e.name });
                 }}
                 placeHolder="Select Country"
                 containerClassName="w-full bg-orange-100 text-orange-500"
                 inputClassName="w-full text-orange-500 bg-orange-100 rounded-md p-2"
+                selectedValue={selectedCountry}
               />
             </div>
             <div className="space-y-2">
@@ -266,11 +279,13 @@ export default function UserAccountPage() {
                 countryid={countryId}
                 onChange={(e: any) => {
                   setStateId(e.id);
+                  setSelectedState(e);
                   setUserProfile({ ...userProfile, state: e.name });
                 }}
                 placeHolder="Select State"
                 containerClassName="w-full bg-orange-100 text-orange-500"
                 inputClassName="w-full text-orange-500 bg-orange-100 rounded-md p-2"
+                selectedValue={selectedState}
               />
             </div>
             <div className="space-y-2">
@@ -279,11 +294,13 @@ export default function UserAccountPage() {
                 countryid={countryId}
                 stateid={stateId}
                 onChange={(e: any) => {
+                  setSelectedCity(e);
                   setUserProfile({ ...userProfile, city: e.name });
                 }}
                 placeHolder="Select City"
                 containerClassName="w-full bg-orange-100 text-orange-500"
                 inputClassName="w-full text-orange-500 bg-orange-100 rounded-md p-2"
+                selectedValue={selectedCity}
               />
             </div>
             <div className="space-y-2">

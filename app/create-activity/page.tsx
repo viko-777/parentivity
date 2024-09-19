@@ -240,7 +240,7 @@ export default function ActivityCreationPage() {
           {isLoading && (
             <div className="mt-4 text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-500"></div>
-              <p className="mt-2 text-orange-500">Creating your activity...</p>
+              <p className="mt-2 text-orange-500">Behold you will soon be able to engage your kid in a fun activity... Just give us a moment...</p>
             </div>
           )}
         </form>

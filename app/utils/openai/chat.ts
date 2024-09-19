@@ -1,6 +1,6 @@
 'use server'
 
-import OpenAI from "openai";
+import { OpenAI }from "openai";
 
 const openai_for_stories = new OpenAI({
   apiKey: process.env.OPENAI_STORY_API_KEY,
@@ -41,6 +41,16 @@ export async function generateStories(name: string, ageGroup: string, likes: str
     
     console.log(response.choices[0].message.content);
     return response.choices[0].message.content;
+}
+
+export async function generateImage (storyTitle: string) {
+    const response = await openai_for_stories.images.generate({
+        prompt: storyTitle,
+        model: "dall-e-3",
+        n: 1,
+        size: "1024x1024"
+    });
+    return response.data[0].url;
 }
 
 export async function generateActivities(name: string, ageGroup: string, likes: string, dislikes: string, activityRequest: string, language: string) {

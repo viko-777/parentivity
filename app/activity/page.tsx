@@ -13,15 +13,12 @@ import Link from 'next/link'
 export default function GeneratedActivityPage() {
   const [activityTitle, setActivityTitle] = useState('')
   const [activityContent, setActivityContent] = useState('')
-  const [generatedImage, setGeneratedImage] = useState('')
   const [user, setUser] = useState<any>(null)
   const [ageGroup, setAgeGroup] = useState('')
   const [isSaved, setIsSaved] = useState(false)
   const supabase = createClient()
   const router = useRouter()
-  const params = useParams()
   const [loading, setLoading] = useState(true)
-  const [activity, setActivity] = useState<any>(null)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,10 +34,9 @@ export default function GeneratedActivityPage() {
     // Get activity data from localStorage
     const activityData = localStorage.getItem('generatedActivity')
     if (activityData) {
-      const { title, content, image } = JSON.parse(activityData)
+      const { title, content } = JSON.parse(activityData)
       setActivityTitle(title)
       setActivityContent(content)
-      setGeneratedImage(image)
       setLoading(false)
     }
     const ageGroup = localStorage.getItem('ageGroup')
@@ -105,9 +101,6 @@ export default function GeneratedActivityPage() {
             rows={20}
             placeholder="Activity Content" disabled
           />
-          {generatedImage && (
-            <img src={generatedImage} alt="Activity Image" className="w-full rounded-lg shadow-md mb-4" />
-          )}
           <div className="flex justify-center mt-6">
             {!isSaved && (
               <button
