@@ -102,7 +102,7 @@ export default function GeneratedStoryPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto bg-orange-50 rounded-lg shadow-md p-6 mt-8 mb-8"
+          className="max-w-7xl mx-auto rounded-lg shadow-md p-6 mt-8 mb-8"
         >
           <Link href="/account?tab=stories" className="inline-block mb-4">
             <button className="bg-orange-500 text-white px-4 py-2 rounded-full transition duration-300 text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-orange-600">
@@ -115,13 +115,13 @@ export default function GeneratedStoryPage() {
             type="text"
             value={storyTitle}
             onChange={(e) => setStoryTitle(e.target.value)}
-            className="w-full px-3 py-2 mb-4 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500"
+            className="w-full px-3 py-2 mb-4 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500 font-bold"
             placeholder="Story Title" disabled
           />
           <textarea
             value={storyContent}
             onChange={(e) => setStoryContent(e.target.value)}
-            className="w-full px-3 py-2 mb-4 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500"
+            className="w-full px-3 py-2 mb-4 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500 font-italic text-lg"
             rows={20}
             placeholder="Story Content" disabled
           />

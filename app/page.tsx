@@ -121,19 +121,20 @@ const ParentivityLanding = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 text-center py-20 bg-opacity-80 backdrop-blur-md relative">
         <div className="absolute inset-0 z-0">
+          <div className="absolute inset-5 z-0">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 text-orange-600">
+              Spark Creative Moments with Your Child!
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 text-orange-600">An AI powered parenting assistant to craft engaging activities that spark your child's imagination</p>
+          </div>
           <Image
             src="/parentivity.svg"
-            alt="Logo background"
+            alt="Parentivity background"
             layout="fill"
-            objectFit="cover"
-            className="opacity-20"
+            className="opacity-10"
           />
         </div>
         <div className="relative z-10">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-orange-600">
-            Spark Creative Moments with Your Child!
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 text-orange-600">An AI powered parenting assistant to craft engaging activities that spark your child's imagination</p>
           <div className="w-96 h-96 mx-auto mb-8 relative">
             <Image 
               src="/parent-and-child-activity-image.png" 

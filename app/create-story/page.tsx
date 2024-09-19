@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { generateStories } from '../utils/openai/chat'
+import { generateStories, generateImage } from '../utils/openai/chat'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
@@ -40,15 +40,10 @@ const backgroundIcons = [
 export default function StoryCreationPage() {
   const [storyRequest, setStoryRequest] = useState('')
   const [kidsProfile, setKidsProfile] = useState('')
-  const [generatedStory, setGeneratedStory] = useState('')
-  const [generatedImage, setGeneratedImage] = useState('')
   const [kidsProfiles, setKidsProfiles] = useState<KidsProfile[]>([])
   const supabase = createClient()
   const [user, setUser] = useState<any>(null)
   const router = useRouter()
-
-  const [storyTitle, setStoryTitle] = useState('')
-  const [storyContent, setStoryContent] = useState('')
 
   const [languages, setLanguages] = useState<Language[]>([])
   const [selectedLanguage, setSelectedLanguage] = useState('')
@@ -107,12 +102,6 @@ export default function StoryCreationPage() {
     setIsLoading(true)
     const selectedProfile = kidsProfiles.find(profile => profile.id === kidsProfile)
     const { name, ageGroup, likes, dislikes } = selectedProfile || {}
-    console.log('kids name:', selectedProfile?.name)
-    console.log('kids ageGroup:', selectedProfile?.ageGroup)
-    console.log('kids likes:', selectedProfile?.likes)
-    console.log('kids dislikes:', selectedProfile?.dislikes)
-    console.log('storyRequest:', storyRequest)
-    console.log('selectedLanguage:', selectedLanguage)
     try {
       const story = await generateStories(
         name ?? '',
@@ -125,7 +114,7 @@ export default function StoryCreationPage() {
       const lines = story.split('\n')
       const title = lines[0] || 'Untitled Story'
       const content = lines.slice(1).join('\n').trim()
-      const image = '/generated-story-image.jpg'
+      const image = await generateImage(title)
 
       if (story == null) {
         console.error('Error creating story:')
@@ -242,7 +231,7 @@ export default function StoryCreationPage() {
           {isLoading && (
             <div className="mt-4 text-center">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-500"></div>
-              <p className="mt-2 text-orange-500">Creating your story...</p>
+              <p className="mt-2 text-orange-500">Behold you will soon be able to read the story to your kid... Just give us a moment...</p>
             </div>
           )}
         </form>
