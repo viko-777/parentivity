@@ -21,7 +21,6 @@ export default function GeneratedStoryPage() {
   const router = useRouter()
   const params = useParams()
   const [loading, setLoading] = useState(true)
-  const [story, setStory] = useState<any>(null)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -63,6 +62,7 @@ export default function GeneratedStoryPage() {
         setStoryContent(data.description)
         setAgeGroup(data.age_group)
         setIsSaved(true)
+        setGeneratedImage(data.image_url)
       }
       setLoading(false)
     }

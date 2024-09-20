@@ -21,7 +21,6 @@ export default function GeneratedStoryPage() {
   const router = useRouter()
   const params = useParams()
   const [loading, setLoading] = useState(true)
-  const [story, setStory] = useState<any>(null)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -73,24 +72,36 @@ export default function GeneratedStoryPage() {
   const saveStory = async () => {
     if (isSaved) return;
 
-    const { data, error } = await supabase
-      .from('Stories')
-      .insert([
-        {
-          title: storyTitle,
-          user_id: user.id,
-          description: storyContent,
-          age_group: ageGroup,
-        },
-      ])
+    const cleanedTitle = storyTitle.replace(/^\*\*(.*)\*\*$/, '$1');
 
-    if (error) {
-      console.error('Error saving story:', error)
-      toast.error('Failed to save the story. Please try again.')
-    } else {
-      console.log('Story saved successfully:', data)
-      toast.success('Story saved successfully!')
-      setIsSaved(true)
+    try {
+      const { data, error } = await supabase
+        .from('Stories')
+        .insert([
+          {
+            title: cleanedTitle,
+            user_id: user.id,
+            description: storyContent,
+            age_group: JSON.parse(ageGroup).ageGroup,
+            image_url: generatedImage,
+          },
+        ])
+        .select()
+        
+      if (data) {
+        toast.success('Story saved successfully!')
+        setIsSaved(true)
+      }
+
+      if (error) {
+        console.error('Error saving story:', error)
+        toast.error('Failed to save the story. Please try again.')
+        setIsSaved(false)
+      }
+    } catch (error) {
+      console.error('Error saving story or image:', error)
+      toast.error('Failed to save the story or image. Please try again.')
+      setIsSaved(false)
     }
   }
 
