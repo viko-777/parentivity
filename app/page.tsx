@@ -8,6 +8,7 @@ import { createClient } from './utils/supabase/client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { text } from 'stream/consumers'
 
 const sampleStories = [
   { title: "The Magic Tree", image: "/themagictree.webp" },
@@ -107,6 +108,41 @@ const ParentivityLanding = () => {
     fetchUser()
   }, [])
 
+  const AnimatedCards = () => {
+    const AnimatedCards = [
+      { text: "Struggling finding ways to have quality time with your child?" },
+      { text: "Unsure how to engage your child?" },
+      { text: "Feeling overwhelmed by parenting?" },
+      { text: "Wish you had personalized, actionable guidance at your fingertips?" },
+      { text: "Welcome to Parentivity!" },
+      { text: "Join Us Today!" }
+    ];
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % AnimatedCards.length);
+      }, 3000); // Change card every 3 seconds
+
+      return () => clearInterval(timer);
+    }, [AnimatedCards.length]);
+
+    return (
+      <div className="flex flex-col items-center">
+        {AnimatedCards.map((text, index) => (
+          <div
+            key={index}
+            className={`card mb-4 ${index === currentIndex ? 'block' : 'hidden'}`}
+            style={{ animationDelay: `0s`, opacity: index === currentIndex ? 1 : 0, animation: 'fadeIn 0.5s forwards' }} // Update opacity based on currentIndex
+          >
+            <h3 className="text-lg font-bold text-orange-600">{text.text}</h3>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
       {/* Background blobs and icons */}
@@ -142,7 +178,9 @@ const ParentivityLanding = () => {
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-orange-600">An AI powered parenting assistant to craft engaging activities that spark your child's imagination</p>
           </div>
-          <Image
+        </div>
+        <div>
+            <Image
             src="/parentivity.svg"
             alt="Parentivity background"
             layout="fill"
@@ -150,7 +188,7 @@ const ParentivityLanding = () => {
           />
         </div>
         <div className="relative z-10">
-          <div className="w-96 h-96 mx-auto mb-8 relative">
+          <div className="w-96 h-96 mx-auto mb-10 relative">
             <Image 
               src="/parent-and-child-activity-image.png" 
               alt="Parents and child doing a creative activity together" 
@@ -158,6 +196,8 @@ const ParentivityLanding = () => {
               objectFit="contain"
             />
           </div>
+          </div>
+          <div><AnimatedCards />
           <Link href="/login">
             <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
               Try the Magic
@@ -165,6 +205,8 @@ const ParentivityLanding = () => {
           </Link>
         </div>
       </section>
+        
+          
 
       {/* How it works Section */}
       <section className="py-20 px-4 bg-white bg-opacity-80 backdrop-blur-md">
@@ -174,19 +216,51 @@ const ParentivityLanding = () => {
           <div className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
             <div className="w-64 h-128 bg-gradient-to-br from-orange-600 to-yellow-500 rounded-3xl shadow-lg p-4 transform rotate-3 hover:rotate-0 transition duration-300">
               <div className="bg-white rounded-2xl h-full p-4 flex flex-col justify-between">
-                <h3 className="text-xl font-bold mb-4 text-orange-600">It's story time!</h3>
-                <p className="text-gray-700 mb-4">Tap into endless creativity with our AI-powered storytelling feature.</p>
+                <h3 className="text-xl font-bold mb-4 text-orange-600">Empower Parents with Tailored Guidance</h3>
+                <p className="text-gray-700 mb-4">Equip parents with personalized, actionable advice designed to meet their child's unique developmental stage, interests, and emotional needs.</p>
                 <div className="flex-grow flex items-center justify-center">
-                  <span className="text-6xl">📚</span>
+                  <span className="text-6xl">🚀</span>
                 </div>
               </div>
             </div>
+            
+            <div className="w-64 h-128 bg-gradient-to-br from-orange-600 to-yellow-500 rounded-3xl shadow-lg p-4 transform rotate-3 hover:rotate-0 transition duration-300">
+              <div className="bg-white rounded-2xl h-full p-4 flex flex-col justify-between">
+                <h3 className="text-xl font-bold mb-4 text-orange-600">Enhance Parent-Child Interaction</h3>
+                <p className="text-gray-700 mb-4">Spark meaningful, engaging interactions through customized stories, activities, and learning pathways that deepen the parent-child bond.</p>
+                <div className="flex-grow flex items-center justify-center">
+                  <span className="text-6xl">🎨</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-64 h-128 bg-gradient-to-br from-orange-600 to-yellow-500 rounded-3xl shadow-lg p-4 transform rotate-3 hover:rotate-0 transition duration-300">
+              <div className="bg-white rounded-2xl h-full p-4 flex flex-col justify-between">
+                <h3 className="text-xl font-bold mb-4 text-orange-600">Promote Family Bonding</h3>
+                <p className="text-gray-700 mb-4">Strengthen family connections with thoughtfully curated bonding experiences that create lasting memories and reinforce togetherness.</p>
+                <div className="flex-grow flex items-center justify-center">
+                  <span className="text-6xl">🎭</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-64 h-128 bg-gradient-to-br from-orange-600 to-yellow-500 rounded-3xl shadow-lg p-4 transform rotate-3 hover:rotate-0 transition duration-300">
+              <div className="bg-white rounded-2xl h-full p-4 flex flex-col justify-between">
+                <h3 className="text-xl font-bold mb-4 text-orange-600">Support Emotional and Cognitive Growth</h3>
+                <p className="text-gray-700 mb-4">Unlock your child's full potential with growth-driven activities, and expert guidance to nurture emotional intelligence and cognitive development.</p>
+                <div className="flex-grow flex items-center justify-center">
+                  <span className="text-6xl">🌈</span>
+                </div>
+              </div>
+            </div>
+          </div>
+         </div>
+         <div className="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
             <Link href="/login">
               <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
                 Try the Magic
               </button>
             </Link>
-          </div>
         </div>
       </section>
 
@@ -239,8 +313,8 @@ const ParentivityLanding = () => {
                   />
                 </div>
                 <div className="w-full md:w-1/2 space-y-4">
-                  <h3 className="text-2xl font-bold text-orange-600">{feature.title}</h3>
-                  <p className="text-gray-700">{feature.description}</p>
+                  <h3 className="text-3xl font-bold text-orange-600">{feature.title}</h3>
+                  <p className="text-gray-700" style={{ fontSize: '1.25rem' }}>{feature.description}</p>
                 </div>
               </div>
             ))}
@@ -343,9 +417,9 @@ const ParentivityLanding = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-orange-600">Happy Parents Feedback</h2>
           <div className="flex flex-wrap justify-center gap-8">
             {[
-              { name: "Sarah M.", quote: "This app has been a lifesaver! My kids are always excited to try the new activities.", emoji: "😊" },
-              { name: "John D.", quote: "I've never felt more connected to my children. The quality time we spend together is priceless.", emoji: "❤️" },
-              { name: "Emily R.", quote: "As a busy parent, this app helps me come up with creative ideas when my brain is fried. Love it!", emoji: "🌟" },
+              { name: "Manasi", quote: "This app has been a lifesaver! My kids are always excited to try the new activities.", emoji: "😊" },
+              { name: "Vikas", quote: "I've never felt more connected to my children. The quality time we spend together is priceless.", emoji: "❤️" },
+              { name: "Rohan", quote: "As a busy parent, this app helps me come up with creative ideas when my brain is fried. Love it!", emoji: "🌟" },
             ].map((testimonial, index) => (
               <div key={index} className="bg-white bg-opacity-80 backdrop-blur-md rounded-lg shadow-lg p-6 w-64 h-64 flex flex-col justify-between">
                 <div className="text-4xl mb-4">{testimonial.emoji}</div>
