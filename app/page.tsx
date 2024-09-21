@@ -61,6 +61,7 @@ const ParentivityLanding = () => {
 
   const featureEmojis = ["🎉", "🧘‍♀️", "👶", "🎓", "❤️"]
   const allEmojis = [...additionalEmojis.map(e => e.emoji), ...featureEmojis]
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const BackgroundEmojis = ({ count = 20 }) => (
     <>
@@ -108,40 +109,22 @@ const ParentivityLanding = () => {
     fetchUser()
   }, [])
 
-  const AnimatedCards = () => {
-    const AnimatedCards = [
-      { text: "Struggling finding ways to have quality time with your child?" },
-      { text: "Unsure how to engage your child?" },
-      { text: "Feeling overwhelmed by parenting?" },
-      { text: "Wish you had personalized, actionable guidance at your fingertips?" },
-      { text: "Welcome to Parentivity!" },
-      { text: "Join Us Today!" }
-    ];
+  const cards = [
+    { text: "Struggling finding ways to have quality time with your child?" },
+    { text: "Unsure how to engage your child?" },
+    { text: "Feeling overwhelmed by parenting?" },
+    { text: "Wish you had personalized, actionable guidance at your fingertips?" },
+    { text: "Welcome to Parentivity!" },
+    { text: "Join Us Today!" }
+  ]
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % cards.length);
+    }, 3000);
 
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % AnimatedCards.length);
-      }, 3000); // Change card every 3 seconds
-
-      return () => clearInterval(timer);
-    }, [AnimatedCards.length]);
-
-    return (
-      <div className="flex flex-col items-center">
-        {AnimatedCards.map((text, index) => (
-          <div
-            key={index}
-            className={`card mb-4 ${index === currentIndex ? 'block' : 'hidden'}`}
-            style={{ animationDelay: `0s`, opacity: index === currentIndex ? 1 : 0, animation: 'fadeIn 0.5s forwards' }} // Update opacity based on currentIndex
-          >
-            <h3 className="text-lg font-bold text-orange-600">{text.text}</h3>
-          </div>
-        ))}
-      </div>
-    );
-  };
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
@@ -197,7 +180,23 @@ const ParentivityLanding = () => {
             />
           </div>
           </div>
-          <div><AnimatedCards />
+          <div>
+          <div className="relative h-24 w-full">
+            {cards.map((card, index) => (
+              <motion.div
+                key={index}
+                className="absolute w-full"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ 
+                  opacity: index === currentIndex ? 1 : 0,
+                  y: index === currentIndex ? 0 : 20
+                }}
+                transition={{ duration: 0.5 }}
+              >
+                <h3 className="text-2xl font-bold text-orange-600 text-center">{card.text}</h3>
+              </motion.div>
+            ))}
+          </div>
           <Link href="/login">
             <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
               Try the Magic
@@ -405,7 +404,7 @@ const ParentivityLanding = () => {
         </Link>
         </div>
       </motion.section>
-  </section>
+    </section>
 
       {/* Testimonials Section */}
       <section className="py-20 px-4 bg-yellow-100 relative overflow-hidden">

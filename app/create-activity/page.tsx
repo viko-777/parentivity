@@ -156,7 +156,7 @@ export default function ActivityCreationPage() {
         return (
           <IconComponent
             key={i}
-            className={`absolute ${iconClass} animate-float`}
+            className={`absolute ${iconClass} animate-float opacity-30`}
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,

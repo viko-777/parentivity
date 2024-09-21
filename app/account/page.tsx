@@ -114,7 +114,9 @@ export default function UserAccountPage() {
           .from('Stories')
           .select('*')
           .eq('user_id', user.id)
-        if (!error && data) {
+          .order('created_at', { ascending: false })
+
+          if (!error && data) {
           setStories(data)
         }
       }
@@ -129,7 +131,9 @@ export default function UserAccountPage() {
           .from('Activities')
           .select('*')
           .eq('user_id', user.id)
-        if (!error && data) {
+          .order('created_at', { ascending: false })
+
+          if (!error && data) {
           setActivities(data)
         }
       }
@@ -139,9 +143,9 @@ export default function UserAccountPage() {
 
   useEffect(() => {
     if (userProfile) {
-      setSelectedCountry({ name: userProfile.country });
-      setSelectedState({ name: userProfile.state });
-      setSelectedCity({ name: userProfile.city });
+      setSelectedCountry(userProfile.country ? { name: userProfile.country } : null);
+      setSelectedState(userProfile.state ? { name: userProfile.state } : null);
+      setSelectedCity(userProfile.city ? { name: userProfile.city } : null);
     }
   }, [userProfile]);
 
@@ -523,7 +527,7 @@ export default function UserAccountPage() {
           <table className="w-full">
             <thead>
               <tr className="bg-orange-100">
-                <th className="p-3 text-left text-orange-500">Sr. No.</th>
+                <th className="p-3 text-left text-orange-500">No.</th>
                 <th className="p-3 text-left text-orange-500">Title of Story</th>
                 <th className="p-3 text-left text-orange-500">Created Date</th>
                 <th className="p-3 text-left text-orange-500">Action</th>
@@ -619,7 +623,7 @@ export default function UserAccountPage() {
           <table className="w-full">
             <thead>
               <tr className="bg-orange-100">
-                <th className="p-3 text-left text-orange-500">Sr. No.</th>
+                <th className="p-3 text-left text-orange-500">No.</th>
                 <th className="p-3 text-left text-orange-500">Activity Name</th>
                 <th className="p-3 text-left text-orange-500">Created Date</th>
                 <th className="p-3 text-left text-orange-500">Action</th>

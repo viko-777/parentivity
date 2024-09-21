@@ -75,9 +75,9 @@ export default function Header() {
             <div className="hidden md:flex items-center space-x-4">
               {!isLoading && !isLoggedIn && (
                 <>
-                  <a href="about-us" className="text-orange-600 hover:to-orange-600 transition duration-300 transform hover:scale-105 text-lg">About Us</a>
-                  <a href="faq" className="text-orange-600 hover:to-orange-600 transition duration-300 transform hover:scale-105 text-lg">FAQ</a>
-                  <a href="pricing" className="text-orange-600 hover:to-orange-600 transition duration-300 transform hover:scale-105 text-lg">Pricing</a>
+                  <a href="about-us" className="text-orange-600 hover:to-orange-600 font-bold transition duration-300 transform hover:scale-105 text-xl">About Us</a>
+                  <a href="faq" className="text-orange-600 hover:to-orange-600 font-bold transition duration-300 transform hover:scale-105 text-xl">FAQ</a>
+                  <a href="pricing" className="text-orange-600 hover:to-orange-600 font-bold transition duration-300 transform hover:scale-105 text-xl">Pricing</a>
                 </>
               )}
               {!isLoading && isLoggedIn && (
