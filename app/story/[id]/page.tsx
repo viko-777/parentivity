@@ -62,7 +62,9 @@ export default function GeneratedStoryPage() {
         setStoryContent(data.description)
         setAgeGroup(data.age_group)
         setIsSaved(true)
-        setGeneratedImage(data.image_url)
+        if (data.image_url) {
+          setGeneratedImage(data.image_url)
+        }
       }
       setLoading(false)
     }
@@ -97,36 +99,45 @@ export default function GeneratedStoryPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
+      <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-orange-100 to-orange-50 overflow-hidden relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto bg-orange-50 rounded-lg shadow-md p-6 mt-8 mb-8"
+          className="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 mt-8 mb-8"
         >
           <Link href="/account?tab=stories" className="inline-block mb-4">
             <button className="bg-orange-500 text-white px-4 py-2 rounded-full transition duration-300 text-sm font-bold shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-orange-600">
               ← Back to Stories
             </button>
           </Link>
-          <h2 className="text-2xl font-bold text-orange-600 mb-4">Generated Story</h2>
-          <label className="text-1xl font-bold text-orange-600 mb-2">Title</label>
-          <input
-            type="text"
-            value={storyTitle}
-            onChange={(e) => setStoryTitle(e.target.value)}
-            className="w-full px-3 py-2 mb-4 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500"
-            placeholder="Story Title" disabled
-          />
-          <textarea
-            value={storyContent}
-            onChange={(e) => setStoryContent(e.target.value)}
-            className="w-full px-3 py-2 mb-4 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500"
-            rows={20}
-            placeholder="Story Content" disabled
-          />
+          
+          {/* Book page rendering */}
+            <div className="max-w-2xl mx-auto">
+              <h1 className="text-4xl font-bold text-orange-800  mb-6 text-center underline">{storyTitle}</h1>
+              <div className="text-gray-800  whitespace-pre-wrap story-content" style={{fontSize: '1.3rem', lineHeight: '1.6' }}>
+                {storyContent && (
+                  <>
+                    <span className="float-left text-9xl mr-3 mt-1 leading-none font-serif font-bold">
+                      {storyContent.charAt(0)}
+                    </span>
+                    <br />
+                    {storyContent.slice(1)}
+                  </>
+                )}
+              </div>
+            </div>
+
           {generatedImage && (
-            <img src={generatedImage} alt="Story Image" className="w-full rounded-lg shadow-md mb-4" />
+            <img 
+              src={generatedImage} 
+              alt="Story Image" 
+              className="w-full rounded-lg shadow-md mb-4" 
+              onError={(e) => {
+                console.error('Image failed to load:', e);
+                setGeneratedImage('');
+              }}
+            />
           )}
           <div className="flex justify-center mt-6">
             {!isSaved && (

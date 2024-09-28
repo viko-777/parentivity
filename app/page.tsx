@@ -2,13 +2,13 @@
 
 import Image from 'next/image'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
-import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { createClient } from './utils/supabase/client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { text } from 'stream/consumers'
+import { useAuth } from '@/app/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 const sampleStories = [
   { title: "The Magic Tree", image: "/themagictree.webp" },
@@ -30,7 +30,8 @@ const ParentivityLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [storyIndex, setStoryIndex] = useState(0)
   const [activityIndex, setActivityIndex] = useState(0)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { isLoggedIn, isLoading } = useAuth();
+  const router = useRouter();
   const supabase = createClient()
   
   const backgroundIcons = [
@@ -97,17 +98,10 @@ const ParentivityLanding = () => {
     }
   }, [])
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { data: { user }, error } = await supabase.auth.getUser()
-      if (error || !user) {
-        setIsLoggedIn (false)
-      } else {
-        setIsLoggedIn(true)
-      }
-    }
-    fetchUser()
-  }, [])
+  const logout = useCallback(async () => {
+    await supabase.auth.signOut()
+    router.push('/')
+  }, [router, supabase]);
 
   const cards = [
     { text: "Struggling finding ways to have quality time with your child?" },
@@ -150,62 +144,58 @@ const ParentivityLanding = () => {
         )
       })}
 
-      <Header />
+      {/* Updated Header */}
+      <header className="bg-transparent absolute top-0 left-0 right-0 z-50">
+        <nav className="container mx-auto px-6 py-4">
+          <div className="flex justify-between items-center">
+            <div className="w-20 h-20 relative">
+              <Link href="/">
+                <Image 
+                  src="/Parentivity.svg" 
+                  alt="Parentivity" 
+                  layout="fill"
+                  objectFit="contain"
+                  className="w-full h-full"
+                />
+              </Link>
+            </div>
+            <div className="flex items-center space-x-6">
+              <a href="about-us" className="text-orange-600 hover:text-orange-700 font-bold transition duration-300">About Us</a>
+              <a href="faq" className="text-orange-600 hover:text-orange-700 font-bold transition duration-300">FAQ</a>
+              <a href="pricing" className="text-orange-600 hover:text-orange-700 font-bold transition duration-300">Pricing</a>
+            </div>
+          </div>
+        </nav>
+      </header>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 text-center py-20 bg-opacity-80 backdrop-blur-md relative">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-5 z-0">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 text-orange-600">
-              Spark Creative Moments with Your Child!
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-orange-600">An AI powered parenting assistant to craft engaging activities that spark your child's imagination</p>
-          </div>
-        </div>
-        <div>
-            <Image
-            src="/parentivity.svg"
-            alt="Parentivity background"
-            layout="fill"
-            className="opacity-10"
+      <section className="pt-32 pb-20 px-4 text-center relative">
+        <BackgroundEmojis count={30} />
+        <h1 className="text-4xl md:text-6xl font-bold mb-4 text-orange-600">
+          Spark Creative Moments with Your Child!
+        </h1>
+        <p className="text-xl md:text-2xl mb-8 text-orange-600">
+          An AI powered parenting assistant to craft engaging activities that spark your child's imagination
+        </p>
+        <div className="w-full max-w-3xl mx-auto mb-10 relative">
+          <Image 
+            src="/parent-and-child-activity-image.png" 
+            alt="Parents and child doing a creative activity together" 
+            width={800}
+            height={600}
+            layout="responsive"
+            objectFit="contain"
           />
         </div>
-        <div className="relative z-10">
-          <div className="w-96 h-96 mx-auto mb-10 relative">
-            <Image 
-              src="/parent-and-child-activity-image.png" 
-              alt="Parents and child doing a creative activity together" 
-              layout="fill"
-              objectFit="contain"
-            />
-          </div>
-          </div>
-          <div>
-          <div className="relative h-24 w-full">
-            {cards.map((card, index) => (
-              <motion.div
-                key={index}
-                className="absolute w-full"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ 
-                  opacity: index === currentIndex ? 1 : 0,
-                  y: index === currentIndex ? 0 : 20
-                }}
-                transition={{ duration: 0.5 }}
-              >
-                <h3 className="text-2xl font-bold text-orange-600 text-center">{card.text}</h3>
-              </motion.div>
-            ))}
-          </div>
-          <Link href="/login">
-            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
-              Try the Magic
-            </button>
-          </Link>
-        </div>
+        <p className="text-2xl font-bold text-orange-600 mb-8">
+          Wish you had personalized, actionable guidance at your fingertips?
+        </p>
+        <Link href="/login">
+          <button className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-full transition duration-300 transform hover:scale-105">
+            Try the Magic
+          </button>
+        </Link>
       </section>
-        
-          
 
       {/* How it works Section */}
       <section className="py-20 px-4 bg-white bg-opacity-80 backdrop-blur-md">

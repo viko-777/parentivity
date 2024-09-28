@@ -9,6 +9,8 @@ import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { checkAuthStatus } from '@/lib/userUtils'
+
 const backgroundIcons = [
   { Icon: Star, className: "text-yellow-400" },
   { Icon: Moon, className: "text-blue-300" },
@@ -30,6 +32,15 @@ export default function SignupPage() {
     confirmPassword: '',
   })
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      const isAuthenticated = await checkAuthStatus()
+      if (isAuthenticated) {
+        router.push('/account')
+      }
+    }
+    checkAuth()
+  }, [router])
   const [passwordsMatch, setPasswordsMatch] = useState(true)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

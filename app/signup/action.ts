@@ -28,3 +28,11 @@ export async function signup(formData: FormData) {
     redirect('/')
     return { success: true, message: 'Signup successful. Please check your email for verification.' }
   }
+    // Set user data in cookies
+    cookies().set('user', JSON.stringify(user), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: '/',
+    })
+  

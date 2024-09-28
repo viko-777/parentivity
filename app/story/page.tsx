@@ -9,6 +9,8 @@ import Footer from '@/components/footer'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Link from 'next/link'
+import imageCompression from 'browser-image-compression';
+import axios from 'axios';
 
 export default function GeneratedStoryPage() {
   const [storyTitle, setStoryTitle] = useState('')
@@ -75,6 +77,27 @@ export default function GeneratedStoryPage() {
     const cleanedTitle = storyTitle.replace(/^\*\*(.*)\*\*$/, '$1');
 
     try {
+      console.log('Fetching and compressing image...');
+      const compressedFile = await fetchAndCompressImage(generatedImage);
+      console.log('Image fetched and compressed successfully');
+
+      // Upload compressed image to Supabase storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('story_images')
+        .upload(`${user.id}/${Date.now()}_${cleanedTitle}.jpg`, compressedFile, {
+          contentType: 'image/jpeg',
+        });
+
+      if (uploadError) {
+        toast.error('Error uploading image: ${uploadError.message}');
+        throw new Error(`Error uploading image: ${uploadError.message}`);
+      }
+
+      // Get public URL for the uploaded image
+      const { data: { publicUrl } } = supabase.storage
+        .from('story_images')
+        .getPublicUrl(uploadData.path);
+
       const { data, error } = await supabase
         .from('Stories')
         .insert([
@@ -83,27 +106,61 @@ export default function GeneratedStoryPage() {
             user_id: user.id,
             description: storyContent,
             age_group: JSON.parse(ageGroup).ageGroup,
-            image_url: generatedImage,
+            image_url: publicUrl,
           },
         ])
-        .select()
-        
+        .select();
+      
       if (data) {
-        toast.success('Story saved successfully!')
-        setIsSaved(true)
+        toast.success('Story saved successfully!');
+        setIsSaved(true);
       }
 
       if (error) {
-        console.error('Error saving story:', error)
-        toast.error('Failed to save the story. Please try again.')
-        setIsSaved(false)
+        console.error('Error saving story:', error);
+        toast.error('Failed to save the story. Please try again.');
+        setIsSaved(false);
       }
+
     } catch (error) {
-      console.error('Error saving story or image:', error)
-      toast.error('Failed to save the story or image. Please try again.')
-      setIsSaved(false)
+      console.error('Error in saveStory:', error);
+      toast.error('Failed to save the story or image. Please try again.');
+      setIsSaved(false);
     }
-  }
+  };
+
+  // New function to fetch and compress the image
+  const fetchAndCompressImage = async (imageUrl: string): Promise<Blob> => {
+    try {
+      console.log('Fetching image from:', imageUrl);
+      const response = await axios.post('/api/fetch-image', { imageUrl }, {
+        responseType: 'blob'
+      });
+
+      console.log('Image fetched successfully');
+      const blob = response.data;
+
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      };
+
+      console.log('Compressing image...');
+      const compressedFile = await imageCompression(blob as File, options);
+      console.log('Image compressed successfully');
+      return compressedFile;
+    } catch (error) {
+      console.error('Error in fetchAndCompressImage:', error);
+      if (axios.isAxiosError(error) && error.response) {
+        console.error('API response:', error.response.data);
+        toast.error(`Failed to fetch image: ${error.response.data.error}`);
+      } else {
+        toast.error('An unexpected error occurred while fetching the image');
+      }
+      throw error;
+    }
+  };
 
   return (
     <>

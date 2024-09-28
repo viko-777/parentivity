@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 
 import { createClient } from '../utils/supabase/server'
 
@@ -15,11 +16,19 @@ export async function login(formData: FormData) {
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { data: { user }, error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
     redirect('/error')
   }
+
+  // Set user data in cookies
+  cookies().set('user', JSON.stringify(user), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 60 * 60 * 24 * 7, // 1 week
+    path: '/',
+  })
 
   revalidatePath('/', 'layout')
   redirect('/account')

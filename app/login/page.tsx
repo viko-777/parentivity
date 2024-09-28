@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { login } from './action'
+import { checkAuthStatus } from '@/lib/userUtils'
 import Header from '@/components/header'
 import { Menu, X, Star, Moon, Cloud, Smile, Footprints, Hand, Users, Flower, Sun, Bike } from 'lucide-react'
 
@@ -25,6 +27,18 @@ export default function LoginPage() {
     email: '',
     password: '',
   })
+
+  const router = useRouter()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const isAuthenticated = await checkAuthStatus()
+      if (isAuthenticated) {
+        router.push('/account')
+      }
+    }
+    checkAuth()
+  }, [router])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
