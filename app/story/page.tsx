@@ -178,23 +178,21 @@ export default function GeneratedStoryPage() {
             </button>
           </Link>
           <h2 className="text-2xl font-bold text-orange-600 mb-4">Generated Story</h2>
-          <label className="text-1xl font-bold text-orange-600 mb-2">Title</label>
-          <input
-            type="text"
-            value={storyTitle}
-            onChange={(e) => setStoryTitle(e.target.value)}
-            className="w-full px-3 py-2 mb-4 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500 font-bold"
-            placeholder="Story Title" disabled
-          />
-          <textarea
-            value={storyContent}
-            onChange={(e) => setStoryContent(e.target.value)}
-            className="w-full px-3 py-2 mb-4 border border-orange-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white text-orange-500 font-italic text-lg"
-            rows={20}
-            placeholder="Story Content" disabled
-          />
+          <div className="max-w-2xl mx-auto">
+            <h1 className="text-3xl font-bold text-orange-600 mb-6 text-center">{storyTitle.replace(/^\*\*(.*)\*\*$/, '$1')}</h1>
+            <div className="text-orange-800 whitespace-pre-wrap story-content" style={{ columnCount: 1, columnGap: '2rem', fontSize: '1.3rem', lineHeight: '1.6' }}>
+              {storyContent && (
+                <>
+                  <span className="float-left text-7xl font-bold mr-3 mt-1 leading-none">
+                    {storyContent.charAt(0)}
+                  </span>
+                  {storyContent.slice(1)}
+                </>
+              )}
+            </div>
+          </div>
           {generatedImage && (
-            <img src={generatedImage} alt="Story Image" className="w-full rounded-lg shadow-md mb-4" />
+            <img src={generatedImage} alt="Story Image" className="w-full rounded-lg shadow-md mb-4 mt-6" />
           )}
           <div className="flex justify-center mt-6">
             {!isSaved && (

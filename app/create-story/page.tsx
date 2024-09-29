@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import { createClient } from '../utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { toast } from 'react-toastify'
 
 interface KidsProfile {
   id: string;
@@ -126,8 +127,8 @@ export default function StoryCreationPage() {
         router.push('/story')
       }
     } catch (error) {
+      toast.error('Error creating story:')
       console.error('Error creating story:', error)
-      // Handle error (e.g., show error message to user)
     } finally {
       setIsLoading(false)
     }

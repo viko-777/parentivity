@@ -46,9 +46,9 @@ export async function generateStories(name: string, ageGroup: string, likes: str
 export async function generateImage (storyTitle: string) {
     const response = await openai_for_stories.images.generate({
         prompt: storyTitle,
-        model: "dall-e-2",
+        model: "dall-e-3",
         n: 1,
-        size: "512x512"
+        size: "1792x1024"
     });
     return response.data[0].url;
 }
