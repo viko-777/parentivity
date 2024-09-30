@@ -25,32 +25,17 @@ export default function GeneratedStoryPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const { data: { user }, error } = await supabase.auth.getUser()
-      if (error || !user) {
+    const fetchUserAndStory = async () => {
+      setLoading(true);
+      // Fetch user
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      if (userError || !user) {
         router.push('/')
-      } else {
-        setUser(user)
+        return;
       }
-    }
-    fetchUser()
+      setUser(user)
 
-    // Get story data from localStorage
-    const storyData = localStorage.getItem('generatedStory')
-    if (storyData) {
-      const { title, content, image } = JSON.parse(storyData)
-      setStoryTitle(title)
-      setStoryContent(content)
-      setGeneratedImage(image)
-    }
-    const ageGroup = localStorage.getItem('ageGroup')
-    if (ageGroup) {
-      setAgeGroup(ageGroup)
-    }
-  }, [])
-
-  useEffect(() => {
-    const fetchStory = async () => {
+      // Fetch story
       const { data, error } = await supabase
         .from('Stories')
         .select('*')
@@ -59,110 +44,33 @@ export default function GeneratedStoryPage() {
 
       if (error) {
         console.error('Error fetching story:', error)
-      } else {
-        setStoryTitle(data.title)
-        setStoryContent(data.description)
-        setAgeGroup(data.age_group)
-        setIsSaved(true)
-        if (data.image_url) {
-          setGeneratedImage(data.image_url)
+        setLoading(false)
+        return;
+      }
+
+      setStoryTitle(data.title)
+      setStoryContent(data.description)
+      setAgeGroup(data.age_group)
+      setIsSaved(true)
+
+      // Fetch image
+      if (user && data.title) {
+        const { data: imageData, error: imageError } = await supabase
+          .storage
+          .from('story_images')
+          .download(`${user.id}/${data.title}.jpg`)
+        
+        if (imageData && !imageError) {
+          const imageUrl = URL.createObjectURL(imageData)
+          setGeneratedImage(imageUrl)
         }
       }
+
       setLoading(false)
     }
 
-    fetchStory()
+    fetchUserAndStory()
   }, [params.id])
-
-  const saveStory = async () => {
-    if (isSaved) return;
-
-    const cleanedTitle = storyTitle.replace(/^\*\*(.*)\*\*$/, '$1');
-
-    try {
-      console.log('Fetching and compressing image...');
-      const compressedFile = await fetchAndCompressImage(generatedImage);
-      console.log('Image fetched and compressed successfully');
-
-      // Upload compressed image to Supabase storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('story_images')
-        .upload(`${user.id}/${Date.now()}_${cleanedTitle}.jpg`, compressedFile, {
-          contentType: 'image/jpeg',
-        });
-
-      if (uploadError) {
-        toast.error(`Error uploading image: ${uploadError.message}`);
-        throw new Error(`Error uploading image: ${uploadError.message}`);
-      }
-
-      // Get public URL for the uploaded image
-      const { data: { publicUrl } } = supabase.storage
-        .from('story_images')
-        .getPublicUrl(uploadData.path);
-
-      const { data, error } = await supabase
-        .from('Stories')
-        .insert([
-          {
-            title: cleanedTitle,
-            user_id: user.id,
-            description: storyContent,
-            age_group: JSON.parse(ageGroup).ageGroup,
-            image_url: publicUrl,
-          },
-        ])
-        .select();
-      
-      if (data) {
-        toast.success('Story saved successfully!');
-        setIsSaved(true);
-      }
-
-      if (error) {
-        console.error('Error saving story:', error);
-        toast.error('Failed to save the story. Please try again.');
-        setIsSaved(false);
-      }
-
-    } catch (error) {
-      console.error('Error in saveStory:', error);
-      toast.error('Failed to save the story or image. Please try again.');
-      setIsSaved(false);
-    }
-  };
-
-  const fetchAndCompressImage = async (imageUrl: string): Promise<Blob> => {
-    try {
-      console.log('Fetching image from:', imageUrl);
-      const response = await axios.post('/api/fetch-image', { imageUrl }, {
-        responseType: 'blob'
-      });
-
-      console.log('Image fetched successfully');
-      const blob = response.data;
-
-      const options = {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1920,
-        useWebWorker: true,
-      };
-
-      console.log('Compressing image...');
-      const compressedFile = await imageCompression(blob as File, options);
-      console.log('Image compressed successfully');
-      return compressedFile;
-    } catch (error) {
-      console.error('Error in fetchAndCompressImage:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        console.error('API response:', error.response.data);
-        toast.error(`Failed to fetch image: ${error.response.data.error}`);
-      } else {
-        toast.error('An unexpected error occurred while fetching the image');
-      }
-      throw error;
-    }
-  };
 
   return (
     <>
@@ -179,7 +87,6 @@ export default function GeneratedStoryPage() {
               ← Back to Stories
             </button>
           </Link>
-          <h2 className="text-2xl font-bold text-orange-600 mb-4">Generated Story</h2>
           <div className="max-w-2xl mx-auto">
             <h1 className="text-3xl font-bold text-orange-600 mb-6 text-center">{storyTitle}</h1>
             <div className="text-orange-800 whitespace-pre-wrap story-content" style={{ columnCount: 1, columnGap: '2rem', fontSize: '1.3rem', lineHeight: '1.6' }}>
@@ -192,18 +99,8 @@ export default function GeneratedStoryPage() {
                 </>
               )}
             </div>
-          </div>
-          {generatedImage && (
-            <img src={generatedImage} alt="Story Image" className="w-full rounded-lg shadow-md mb-4" />
-          )}
-          <div className="flex justify-center mt-6">
-            {!isSaved && (
-              <button
-                onClick={saveStory}
-                className="bg-orange-500 text-white px-12 py-3 rounded-full transition duration-300 text-lg font-bold shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-orange-600"
-              >
-                Save Story
-              </button>
+            {generatedImage && (
+              <img src={generatedImage} alt="Story Image" className="w-full rounded-lg shadow-md mt-8" />
             )}
           </div>
         </motion.div>

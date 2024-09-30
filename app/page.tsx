@@ -6,9 +6,10 @@ import Footer from '@/components/footer'
 import { createClient } from './utils/supabase/client'
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/app/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import { keyframes, css } from '@emotion/react';
 
 const sampleStories = [
   { title: "The Magic Tree", image: "/themagictree.webp" },
@@ -25,6 +26,16 @@ const sampleActivities = [
   { title: "Nature Walk", image: "/Nature Walk.webp" },
   { title: "Cookie Baking", image: "/Cookie Baking.webp" },
 ]
+
+const scrollAnimation = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+`;
+
 
 const ParentivityLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -47,7 +58,7 @@ const ParentivityLanding = () => {
     { Icon: Bike, className: "text-green-400" },
   ]
 
-  const additionalEmojis = [
+  const allEmojis = [
     { emoji: "🚀" },
     { emoji: "🌈" },
     { emoji: "🎨" },
@@ -58,10 +69,13 @@ const ParentivityLanding = () => {
     { emoji: "🧸" },
     { emoji: "🌺" },
     { emoji: "🦄" },
+    { emoji: "🎉" },
+    { emoji: "🧘‍♀️" },
+    { emoji: "👶" },
+    { emoji: "🎓" },
+    { emoji: "❤️" },
   ]
 
-  const featureEmojis = ["🎉", "🧘‍♀️", "👶", "🎓", "❤️"]
-  const allEmojis = [...additionalEmojis.map(e => e.emoji), ...featureEmojis]
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const BackgroundEmojis = ({ count = 20 }) => (
@@ -77,26 +91,11 @@ const ParentivityLanding = () => {
             animationDuration: `${Math.random() * 10 + 10}s`,
           }}
         >
-          {allEmojis[Math.floor(Math.random() * allEmojis.length)]}
+          {allEmojis[Math.floor(Math.random() * allEmojis.length)].emoji}
         </div>
       ))}
     </>
   )
-
-  useEffect(() => {
-    const storyInterval = setInterval(() => {
-      setStoryIndex((prevIndex) => (prevIndex + 1) % sampleStories.length)
-    }, 3000)
-
-    const activityInterval = setInterval(() => {
-      setActivityIndex((prevIndex) => (prevIndex + 1) % sampleActivities.length)
-    }, 3000)
-
-    return () => {
-      clearInterval(storyInterval)
-      clearInterval(activityInterval)
-    }
-  }, [])
 
   const logout = useCallback(async () => {
     await supabase.auth.signOut()
@@ -119,6 +118,14 @@ const ParentivityLanding = () => {
 
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setStoryIndex((prevIndex) => (prevIndex + 1) % sampleStories.length)
+    }, 3000) // Change story every 3 seconds
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <div className="min-h-screen font-['Comic_Sans_MS',_'Comic_Sans',_cursive] bg-gradient-to-b from-white to-orange-100 overflow-hidden relative">
@@ -191,7 +198,7 @@ const ParentivityLanding = () => {
           Wish you had personalized, actionable guidance at your fingertips?
         </p>
         <Link href="/login">
-          <button className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold px-8 py-3 rounded-full transition duration-300 transform hover:scale-105">
+          <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
             Try the Magic
           </button>
         </Link>
@@ -331,69 +338,74 @@ const ParentivityLanding = () => {
       </section> */}
     
     <section className="py-20 px-4 bg-white bg-opacity-80 backdrop-blur-md">
-    <BackgroundEmojis count={30} />
-
-      <motion.section
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="mb-12"
-      >
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-orange-600">Sample Stories</h2>
-        <div className="relative overflow-hidden h-64">
-          <motion.div
-            animate={{ x: `-${storyIndex * 100}%` }}
-            transition={{ duration: 0.5 }}
-            className="flex absolute"
-          >
-            {sampleStories.map((story, index) => (
-              <div key={index} className="w-full flex-shrink-0 px-4">
-                <Image src={story.image} alt={story.title} width={200} height={200} className="mx-auto rounded-lg shadow-md" />
-                <p className="mt-2 text-center text-orange-600">{story.title}</p>
+      <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-orange-600">Sample Stories</h2>
+      <div className="overflow-hidden">
+        <div 
+          className="flex space-x-6 animate-scroll"
+          style={{
+            animation: `${scrollAnimation} 30s linear infinite`,
+            width: `${sampleStories.length * 280}px`, // Adjust based on card width + gap
+          }}
+        >
+          {[...sampleStories, ...sampleStories].map((story, index) => (
+            <div key={index} className="w-64 h-80 flex-shrink-0 rounded-lg shadow-md overflow-hidden relative">
+              <Image 
+                src={story.image} 
+                alt={story.title} 
+                layout="fill"
+                objectFit="cover"
+                className="w-full h-full"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                <p className="text-white text-center font-semibold">{story.title}</p>
               </div>
-            ))}
-          </motion.div>
+            </div>
+          ))}
         </div>
-
-        <div className="text-center mt-4">
+      </div>
+      <div className="text-center mt-8">
         <Link href={isLoggedIn ? "/create-story" : "/login"}> 
           <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
             Create Stories
           </button>
         </Link>
-        </div>
-      </motion.section>
+      </div>
 
-      <motion.section
-        initial={{ opacity: 0, x: 100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="mb-12"
-      >
-        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-orange-600">Sample Activities</h2>
-        <div className="relative overflow-hidden h-64">
-          <motion.div
-            animate={{ x: `-${activityIndex * 100}%` }}
-            transition={{ duration: 0.5 }}
-            className="flex absolute"
-          >
-            {sampleActivities.map((activity, index) => (
-              <div key={index} className="w-full flex-shrink-0 px-4">
-                <Image src={activity.image} alt={activity.title} width={200} height={200} className="mx-auto rounded-lg shadow-md" />
-                <p className="mt-2 text-center text-orange-600">{activity.title}</p>
+    </section>
+
+    <section className="py-20 px-4 bg-white bg-opacity-80 backdrop-blur-md">
+    <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-orange-600">Sample Activities</h2>
+      <div className="overflow-hidden">
+        <div 
+          className="flex space-x-6 animate-scroll"
+          style={{
+            animation: `${scrollAnimation} 30s linear infinite`,
+            width: `${sampleStories.length * 280}px`,
+          }}
+        >
+          {[...sampleActivities, ...sampleActivities].map((activity, index) => (
+            <div key={index} className="w-64 h-80 flex-shrink-0 rounded-lg shadow-md overflow-hidden relative">
+              <Image 
+                src={activity.image} 
+                alt={activity.title} 
+                layout="fill"
+                objectFit="cover"
+                className="w-full h-full"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                <p className="text-white text-center font-semibold">{activity.title}</p>
               </div>
-            ))}
-          </motion.div>
-
+            </div>
+          ))}
         </div>
-        <div className="text-center mt-4">
-        <Link href={isLoggedIn ? "/create-activity" : "/login"}>
+      </div>
+      <div className="text-center mt-8">
+        <Link href={isLoggedIn ? "/create-activity" : "/login"}> 
           <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full hover:from-yellow-500 hover:to-orange-600 transition duration-300 transform hover:scale-105">
-              Create Activities
+            Create Activity
           </button>
         </Link>
-        </div>
-      </motion.section>
+      </div>
     </section>
 
       {/* Testimonials Section */}

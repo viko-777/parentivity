@@ -16,7 +16,7 @@ export default function Footer() {
       { Icon: Bike, className: "text-green-400" },
     ]
   
-    const additionalEmojis = [
+    const allEmojis = [
       { emoji: "🚀" },
       { emoji: "🌈" },
       { emoji: "🎨" },
@@ -27,11 +27,13 @@ export default function Footer() {
       { emoji: "🧸" },
       { emoji: "🌺" },
       { emoji: "🦄" },
+      { emoji: "🎉" },
+      { emoji: "🧘‍♀️" },
+      { emoji: "👶" },
+      { emoji: "🎓" },
+      { emoji: "❤️" },
     ]
-  
-    const featureEmojis = ["🎉", "🧘‍♀️", "👶", "🎓", "❤️"]
-    const allEmojis = [...additionalEmojis.map(e => e.emoji), ...featureEmojis]
-  
+    
     const BackgroundEmojis = ({ count = 20 }) => (
       <>
         {[...Array(count)].map((_, i) => (
@@ -45,7 +47,7 @@ export default function Footer() {
               animationDuration: `${Math.random() * 10 + 10}s`,
             }}
           >
-            {allEmojis[Math.floor(Math.random() * allEmojis.length)]}
+            {allEmojis[Math.floor(Math.random() * allEmojis.length)].emoji}
           </div>
         ))}
       </>

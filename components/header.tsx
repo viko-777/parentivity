@@ -20,7 +20,7 @@ export default function Header() {
     router.push('/')
   }, [router]);
 
-  const additionalEmojis = [
+  const allEmojis = [
     { emoji: "🚀" },
     { emoji: "🌈" },
     { emoji: "🎨" },
@@ -31,10 +31,12 @@ export default function Header() {
     { emoji: "🧸" },
     { emoji: "🌺" },
     { emoji: "🦄" },
+    { emoji: "🎉" },
+    { emoji: "🧘‍♀️" },
+    { emoji: "👶" },
+    { emoji: "🎓" },
+    { emoji: "❤️" },
   ]
-
-  const featureEmojis = ["🎉", "🧘‍♀️", "👶", "🎓", "❤️"]
-  const allEmojis = [...additionalEmojis.map(e => e.emoji), ...featureEmojis]
 
   const BackgroundEmojis = ({ count = 20 }) => (
     <>
@@ -49,7 +51,7 @@ export default function Header() {
             animationDuration: `${Math.random() * 10 + 10}s`,
           }}
         >
-          {allEmojis[Math.floor(Math.random() * allEmojis.length)]}
+          {allEmojis[Math.floor(Math.random() * allEmojis.length)].emoji}
         </div>
       ))}
     </>

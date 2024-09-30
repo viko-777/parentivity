@@ -74,7 +74,8 @@ export default function GeneratedStoryPage() {
   const saveStory = async () => {
     if (isSaved) return;
 
-    const cleanedTitle = storyTitle.replace(/^\*\*(.*)\*\*$/, '$1');
+    let cleanedTitle = storyTitle.replace(/^\*\*(.*)\*\*$/, '$1');
+    cleanedTitle = cleanedTitle.replace(/^Title:\s*/i, '');
 
     try {
       console.log('Fetching and compressing image...');
@@ -84,7 +85,7 @@ export default function GeneratedStoryPage() {
       // Upload compressed image to Supabase storage
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('story_images')
-        .upload(`${user.id}/${Date.now()}_${cleanedTitle}.jpg`, compressedFile, {
+        .upload(`${user.id}/${cleanedTitle}.jpg`, compressedFile, {
           contentType: 'image/jpeg',
         });
 
@@ -92,11 +93,6 @@ export default function GeneratedStoryPage() {
         toast.error('Error uploading image: ${uploadError.message}');
         throw new Error(`Error uploading image: ${uploadError.message}`);
       }
-
-      // Get public URL for the uploaded image
-      const { data: { publicUrl } } = supabase.storage
-        .from('story_images')
-        .getPublicUrl(uploadData.path);
 
       const { data, error } = await supabase
         .from('Stories')
@@ -106,7 +102,6 @@ export default function GeneratedStoryPage() {
             user_id: user.id,
             description: storyContent,
             age_group: JSON.parse(ageGroup).ageGroup,
-            image_url: publicUrl,
           },
         ])
         .select();
